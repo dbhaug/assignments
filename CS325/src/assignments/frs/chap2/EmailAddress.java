@@ -26,7 +26,7 @@ package assignments.frs.chap2;
 public class EmailAddress {
   private String address;
   public EmailAddress(String address) {
-    this.address = address;
+    this.address=address;
   }
   /**
    * Verify that a string is an email address.
@@ -46,7 +46,7 @@ public class EmailAddress {
   public boolean isValid() {
     // This implementation is wrong and could be expressed more
     // elegantly using regular expressions.
-    if(address.matches("[a-zA-Z][a-zA-Z0-9]*[@][a-zA-Z0-9]+[[\\.][a-zA-Z0-9]+]+")){
+    if(address.matches("[a-zA-Z][a-zA-Z0-9]*[@][a-zA-Z][a-zA-Z0-9]*[[\\.][a-zA-Z][a-zA-Z0-9]*]+")){
     	return true;
     }else{
     	return false;
