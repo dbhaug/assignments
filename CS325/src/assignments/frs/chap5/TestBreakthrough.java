@@ -1,6 +1,8 @@
 package assignments.frs.chap5;
 
 import org.junit.*;
+
+import assignments.frs.chap5.Breakthrough.PlayerType;
 import static org.junit.Assert.*;
 
 /** Initial test case class for Breakthrough
@@ -44,12 +46,20 @@ public class TestBreakthrough {
 	}@Test
 	public void shouldBeAbleToMove(){
 		assertTrue("Black moves down",game.isMoveValid(1,0,2,0));
-		assertTrue("White moves up",game.isMoveValid(6,0,5,0));
+		
+		//assertTrue("White moves up",game.isMoveValid(6,0,5,0));
 	}
 	@Test
 	public void shouldNotBeAbleToMove(){
 		assertFalse(game.isMoveValid(0,0,1,0));
 		assertFalse(game.isMoveValid(1,2,0,2));
 		assertFalse(game.isMoveValid(7,7,8,8));
+	}
+	@Test
+	public void shouldMove(){
+		game.move(1,0,2,0);
+		assertEquals("Previous spot should be empty", game.getPieceAt(1,0),BreakthroughImpl.PieceType.NONE);
+		assertEquals("New spot should have black piece", game.getPieceAt(2,0),BreakthroughImpl.PieceType.BLACK);
+		assertEquals("Current player should be white", game.getPlayerInTurn(),BreakthroughImpl.PlayerType.WHITE);
 	}
 }

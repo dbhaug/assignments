@@ -57,11 +57,12 @@ public class BreakthroughImpl implements Breakthrough {
 
 	public boolean isMoveValid(int fromRow, int fromColumn,
 			int toRow, int toColumn) {
-		if(toColumn>boardSize||toRow>boardSize){
+		if(toColumn>boardSize-1||toRow>boardSize-1){
 			return false;
-		}//else if(toColumn<0||toRow<0){
-			//return false;
-		//}
+		}
+		if(toColumn<0||toRow<0){
+			return false;
+		}
 		if(board[toRow][toColumn]!=0){
 			return false;
 		}
@@ -74,9 +75,13 @@ public class BreakthroughImpl implements Breakthrough {
 		return true;
 		
 	}
-
 	public void move(int fromRow, int fromColumn,
 			int toRow, int toColumn) {
+		if(isMoveValid(fromRow,fromColumn,toRow,toColumn)){
+			board[toRow][toColumn]=board[fromRow][fromColumn];
+			board[fromRow][fromColumn]=0;
+			playerInTurn=playerInTurn==PlayerType.BLACK?PlayerType.WHITE:PlayerType.BLACK;
+		}
 	}
 }
 
