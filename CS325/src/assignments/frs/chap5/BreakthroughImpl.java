@@ -20,7 +20,7 @@ public class BreakthroughImpl implements Breakthrough {
 	
 	private int[][] board;
 	private int boardSize=8;
-	private PlayerType playerInTurn=PlayerType.BLACK;
+	private PlayerType playerInTurn=PlayerType.WHITE;
 	
 	public BreakthroughImpl(){
 		board=new int[boardSize][boardSize];
@@ -52,24 +52,31 @@ public class BreakthroughImpl implements Breakthrough {
 	}
 
 	public PlayerType getWinner() {
+		for(int i=0;i<boardSize;i++){
+			if(getPieceAt(0,i)==PieceType.WHITE){
+				return PlayerType.WHITE;
+			}else if(getPieceAt(boardSize-1,i)==PieceType.BLACK){
+				return PlayerType.BLACK;
+			}
+		}
 		return null;
 	}
 
 	public boolean isMoveValid(int fromRow, int fromColumn,
 			int toRow, int toColumn) {
-		if(toColumn>boardSize-1||toRow>boardSize-1){
+		if(!testForBoardLimits(fromRow,fromColumn,toRow,toColumn)){
 			return false;
 		}
-		if(toColumn<0||toRow<0){
+		if(!testForMovementDirection(fromRow,fromColumn,toRow,toColumn)){
 			return false;
 		}
-		if(board[toRow][toColumn]!=0){
+		if(!testForMovingOwnPiece(fromRow,fromColumn,toRow,toColumn)){
 			return false;
 		}
-		if(playerInTurn==PlayerType.BLACK&&toRow<fromRow){
+		if(!testForDistance(fromRow,fromColumn,toRow,toColumn)){
 			return false;
 		}
-		if(playerInTurn==PlayerType.WHITE&&toRow>fromRow){
+		if(!testForStraightPieceTake(fromRow,fromColumn,toRow,toColumn)){
 			return false;
 		}
 		return true;
@@ -82,6 +89,52 @@ public class BreakthroughImpl implements Breakthrough {
 			board[fromRow][fromColumn]=0;
 			playerInTurn=playerInTurn==PlayerType.BLACK?PlayerType.WHITE:PlayerType.BLACK;
 		}
+		if(getWinner()!=null){
+			
+		}
 	}
+	private boolean testForBoardLimits(int fromRow,int fromColumn,int toRow,int toColumn){
+		if(toColumn>boardSize-1||toRow>boardSize-1){
+			return false;
+		}
+		if(toColumn<0||toRow<0){
+			return false;
+		}
+		return true;
+	}
+	private boolean testForMovingOwnPiece(int fromRow,int fromColumn,int toRow,int toColumn){
+		if(playerInTurn==PlayerType.WHITE&&getPieceAt(fromRow, fromColumn)!=PieceType.WHITE){
+			return false;
+		}
+		if(playerInTurn==PlayerType.BLACK&&getPieceAt(fromRow, fromColumn)!=PieceType.BLACK){
+			return false;
+		}
+		return true;
+	}
+	private boolean testForMovementDirection(int fromRow,int fromColumn,int toRow,int toColumn){
+		if(playerInTurn==PlayerType.BLACK&&toRow<fromRow){
+			return false;
+		}
+		if(playerInTurn==PlayerType.WHITE&&toRow>fromRow){
+			return false;
+		}
+		return true;
+	}
+	private boolean testForDistance(int fromRow,int fromColumn,int toRow,int toColumn){
+		if(Math.abs(fromRow-toRow)>1){
+			return false;
+		}
+		if(Math.abs(fromColumn-toColumn)>1){
+			return false;
+		}
+		return true;
+	}
+	private boolean testForStraightPieceTake(int fromRow,int fromColumn,int toRow,int toColumn){
+		if(toColumn==fromColumn){
+			return board[toRow][toColumn]==0;
+		}
+		return true;
+	}
+	
 }
 

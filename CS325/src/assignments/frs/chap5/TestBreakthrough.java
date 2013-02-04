@@ -41,25 +41,53 @@ public class TestBreakthrough {
 	}
 	@Test
 	public void firstPlayerShouldBeBlack(){
-		assertEquals( "Black goes first",
-				BreakthroughImpl.PlayerType.BLACK, game.getPlayerInTurn() );
+		assertEquals( "White goes first",
+				BreakthroughImpl.PlayerType.WHITE, game.getPlayerInTurn() );
 	}@Test
 	public void shouldBeAbleToMove(){
-		assertTrue("Black moves down",game.isMoveValid(1,0,2,0));
+		//assertTrue("Black moves down",game.isMoveValid(1,0,2,0));
 		
-		//assertTrue("White moves up",game.isMoveValid(6,0,5,0));
+		assertTrue("White can move up",game.isMoveValid(6,0,5,0));
+		assertTrue("White can move up/diagonal right",game.isMoveValid(6,0,5,1));
+		assertTrue("White can move up/diagonal left", game.isMoveValid(6, 1, 5, 0));
 	}
 	@Test
 	public void shouldNotBeAbleToMove(){
 		assertFalse(game.isMoveValid(0,0,1,0));
 		assertFalse(game.isMoveValid(1,2,0,2));
 		assertFalse(game.isMoveValid(7,7,8,8));
+		assertFalse(game.isMoveValid(6, 0, 4, 0));
 	}
 	@Test
 	public void shouldMove(){
-		game.move(1,0,2,0);
-		assertEquals("Previous spot should be empty", game.getPieceAt(1,0),BreakthroughImpl.PieceType.NONE);
-		assertEquals("New spot should have black piece", game.getPieceAt(2,0),BreakthroughImpl.PieceType.BLACK);
-		assertEquals("Current player should be white", game.getPlayerInTurn(),BreakthroughImpl.PlayerType.WHITE);
+		game.move(6,0,5,0);
+		assertEquals("Previous spot should be empty", game.getPieceAt(6,0),BreakthroughImpl.PieceType.NONE);
+		assertEquals("New spot should have black piece", game.getPieceAt(5,0),BreakthroughImpl.PieceType.WHITE);
+		assertEquals("Current player should be white", game.getPlayerInTurn(),BreakthroughImpl.PlayerType.BLACK);
+		assertTrue("Black moves down",game.isMoveValid(1,0,2,0));
+	}
+	@Test
+	public void canTakePawn(){
+		game.move(6, 0, 5, 0);
+		game.move(1, 0, 2, 0);
+		game.move(5, 0, 4, 1);
+		game.move(2, 0, 3, 0);
+		assertTrue("White can take Black Pawn",game.isMoveValid(4, 1, 3, 0));
+	}
+	@Test
+	public void cantTakePawn(){
+		game.move(6, 0, 5, 0);
+		game.move(1, 0, 2, 0);
+		game.move(5, 0, 4, 0);
+		game.move(2, 0, 3, 0);
+		assertFalse("White cant take Black Pawn", game.isMoveValid(4, 0, 3, 0));
+	}
+	@Test
+	public void cantMoveWrongPawn(){
+		assertFalse(game.isMoveValid(1, 0, 2, 0));
+	}
+	@Test
+	public void cantMoveOverYourPawn(){
+		assertFalse(game.isMoveValid(7, 2, 6, 2));
 	}
 }
