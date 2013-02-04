@@ -24,29 +24,26 @@ public class TestAlphamon {
 
 	@Before public void setup() {
 		game = new GameImpl();
+		game.newGame();
 	}
 
 	@Test 
 	public void shouldHaveNoPlayerInTurnAfterNewGame() {
-		game.newGame();
 		assertEquals( Color.NONE, game.getPlayerInTurn() );
 	}
 	@Test 
-	public void shouldHaveBlackPlayerInTurnAfterNewGame() {
-		game.newGame();
-		game.nextTurn(); // will throw [1,2] and thus black starts
+	public void shouldHaveBlackPlayerInTurnAfterNextTurn() {
+		game.nextTurn();
 		assertEquals( Color.BLACK, game.getPlayerInTurn() );
 	}
 	@Test
 	public void shouldHaveTwoBlackCheckersOnR1(){
-		game.newGame();
 		game.nextTurn();
 		assertTrue(game.getCount(Location.R1)==2);
 		assertTrue(game.getColor(Location.R1)==Color.BLACK);
 	}
 	@Test
 	public void shouldBeAbleToMoveBlackR1toR2(){
-		game.newGame();
 		game.nextTurn();
 		assertTrue(game.move(Location.R1, Location.R2));
 		assertTrue(game.getCount(Location.R1)==1);

@@ -18,34 +18,24 @@ package assignments.frs.hotgammon.alphamon;
  */
 public class GameImpl implements Game {
 	private Color playerInTurn=Color.NONE;
-	private int[][] board;
+	private Triangle[] board;
 	private int numberOfMoves;
+	
 
 	public void newGame() {
-		board=new int[2][28];
-		for(int i=0;i<board.length;i++){
-			board[1][i]=0;
-			board[0][i]=0;
-		}
-		board[1][0]=1;
-		board[1][25]=-1;
-		board[1][26]=1;
-		board[1][27]=-1;
-		board[0][1]=2;
-		board[1][1]=1;
-		board[0][24]=2;
-		board[1][24]=-1;
+		board=new Triangle[28];
+		board[Location.R1.ordinal()].setCount(2);
 	}
 	public void nextTurn() {
 		playerInTurn=Color.BLACK;
 		numberOfMoves = 2;
 	}
 	public boolean move(Location from, Location to) {
-		if(board[1][to.ordinal()]==-playerInTurn.getSign()){
+		if(board[to.ordinal()].getColor().getSign()==-playerInTurn.getSign()){
 			return false;
 		}
-		board[0][from.ordinal()]--;
-		board[0][to.ordinal()]++;
+		board[from.ordinal()].setCount(board[from.ordinal()].getCount()-1);
+		board[to.ordinal()].setCount(board[to.ordinal()].getCount()+1);
 		numberOfMoves--;
 		return true;
 	}
@@ -57,9 +47,9 @@ public class GameImpl implements Game {
 	public int[] diceValuesLeft() { return new int []{}; }
 	public Color winner() { return Color.NONE; }
 	public Color getColor(Location location) {
-		return Color.getColorFromNumerical(board[1][location.ordinal()]);
+		return board[location.ordinal()].getColor();
 	}
-	public int getCount(Location location) { 
-		return board[0][location.ordinal()];
+	public int getCount(Location location) {
+		return board[location.ordinal()].getCount();
 	}
 }
