@@ -18,34 +18,38 @@ package assignments.frs.hotgammon.alphamon;
  */
 public class GameImpl implements Game {
 	private Color playerInTurn=Color.NONE;
-	private int[][] board;
+	private Triangle[] board;
 	private int numberOfMoves;
+	private int turns=0;
+	
 
 	public void newGame() {
-		board=new int[2][28];
-		for(int i=0;i<board.length;i++){
-			board[1][i]=0;
-			board[0][i]=0;
+		board=new Triangle[28];
+		for(int i=0;i<28;i++){
+			board[i]=new Triangle();
 		}
-		board[1][0]=1;
-		board[1][25]=-1;
-		board[1][26]=1;
-		board[1][27]=-1;
-		board[0][1]=2;
-		board[1][1]=1;
-		board[0][24]=2;
-		board[1][24]=-1;
+		board[Location.R1.ordinal()].setCount(2);
+		board[Location.R1.ordinal()].setColor(Color.BLACK);
+		board[Location.B1.ordinal()].setColor(Color.RED);
+		board[Location.B1.ordinal()].setCount(1);
 	}
 	public void nextTurn() {
-		playerInTurn=Color.BLACK;
+		playerInTurn=playerInTurn==Color.BLACK?Color.RED:Color.BLACK;
 		numberOfMoves = 2;
+		turns++;
 	}
 	public boolean move(Location from, Location to) {
-		if(board[1][to.ordinal()]==-playerInTurn.getSign()){
+		if(board[to.ordinal()].getColor().getSign()==-playerInTurn.getSign()){
 			return false;
 		}
-		board[0][from.ordinal()]--;
-		board[0][to.ordinal()]++;
+		if(board[from.ordinal()].getCount()<1){
+			return false;
+		}
+		if(numberOfMoves==0){
+			return false;
+		}
+		board[from.ordinal()].setCount(board[from.ordinal()].getCount()-1);
+		board[to.ordinal()].setCount(board[to.ordinal()].getCount()+1);
 		numberOfMoves--;
 		return true;
 	}
@@ -53,13 +57,23 @@ public class GameImpl implements Game {
 	public int getNumberOfMovesLeft() {
 		return numberOfMoves;
 	}
-	public int[] diceThrown() { return new int[] {1,1}; }
-	public int[] diceValuesLeft() { return new int []{}; }
-	public Color winner() { return Color.NONE; }
-	public Color getColor(Location location) {
-		return Color.getColorFromNumerical(board[1][location.ordinal()]);
+	public int[] diceThrown() { 
+		if(turns%3==1){
+			return new int[] {1,2};
+		}else if(turns%3==2){
+			return new int[] {3,4};
+		}else{
+			return new int[] {5,6};
+		}
 	}
-	public int getCount(Location location) { 
-		return board[0][location.ordinal()];
+	public int[] diceValuesLeft() { return new int []{}; }
+	public Color winner() {
+		return turns>6?Color.RED:Color.NONE;
+	}
+	public Color getColor(Location location) {
+		return board[location.ordinal()].getColor();
+	}
+	public int getCount(Location location) {
+		return board[location.ordinal()].getCount();
 	}
 }
