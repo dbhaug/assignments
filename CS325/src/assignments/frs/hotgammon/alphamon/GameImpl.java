@@ -22,6 +22,7 @@ public class GameImpl implements Game {
 	private int numberOfMoves;
 	private int turns=0;
 	
+	
 
 	public void newGame() {
 		board=new Triangle[28];
@@ -32,6 +33,7 @@ public class GameImpl implements Game {
 		board[Location.R1.ordinal()].setColor(Color.BLACK);
 		board[Location.B1.ordinal()].setColor(Color.RED);
 		board[Location.B1.ordinal()].setCount(1);
+		board[Location.R1.ordinal()].setCount(2);
 	}
 	public void nextTurn() {
 		playerInTurn=playerInTurn==Color.BLACK?Color.RED:Color.BLACK;
