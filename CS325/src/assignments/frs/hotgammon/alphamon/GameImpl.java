@@ -22,8 +22,6 @@ public class GameImpl implements Game {
 	private int numberOfMoves;
 	private int turns=0;
 	
-	
-
 	public void newGame() {
 		board=new Triangle[28];
 		for(int i=0;i<28;i++){
