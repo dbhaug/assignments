@@ -20,18 +20,32 @@ public class GameImpl implements Game {
 	private Color playerInTurn=Color.NONE;
 	private Triangle[] board;
 	private int numberOfMoves;
+	private int turns=0;
 	
-
 	public void newGame() {
 		board=new Triangle[28];
+		for(int i=0;i<28;i++){
+			board[i]=new Triangle();
+		}
+		board[Location.R1.ordinal()].setCount(2);
+		board[Location.R1.ordinal()].setColor(Color.BLACK);
+		board[Location.B1.ordinal()].setColor(Color.RED);
+		board[Location.B1.ordinal()].setCount(1);
 		board[Location.R1.ordinal()].setCount(2);
 	}
 	public void nextTurn() {
-		playerInTurn=Color.BLACK;
+		playerInTurn=playerInTurn==Color.BLACK?Color.RED:Color.BLACK;
 		numberOfMoves = 2;
+		turns++;
 	}
 	public boolean move(Location from, Location to) {
 		if(board[to.ordinal()].getColor().getSign()==-playerInTurn.getSign()){
+			return false;
+		}
+		if(board[from.ordinal()].getCount()<1){
+			return false;
+		}
+		if(numberOfMoves==0){
 			return false;
 		}
 		board[from.ordinal()].setCount(board[from.ordinal()].getCount()-1);
@@ -43,9 +57,19 @@ public class GameImpl implements Game {
 	public int getNumberOfMovesLeft() {
 		return numberOfMoves;
 	}
-	public int[] diceThrown() { return new int[] {1,1}; }
+	public int[] diceThrown() { 
+		if(turns%3==1){
+			return new int[] {1,2};
+		}else if(turns%3==2){
+			return new int[] {3,4};
+		}else{
+			return new int[] {5,6};
+		}
+	}
 	public int[] diceValuesLeft() { return new int []{}; }
-	public Color winner() { return Color.NONE; }
+	public Color winner() {
+		return turns>6?Color.RED:Color.NONE;
+	}
 	public Color getColor(Location location) {
 		return board[location.ordinal()].getColor();
 	}

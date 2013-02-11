@@ -14,7 +14,7 @@ package assignments.frs.hotgammon.alphamon;
    
    This source code is provided WITHOUT ANY WARRANTY either 
    expressed or implied. You may study, use, modify, and 
-   distribute it for non-commercial purposes. For any 
+   distribute it for non-commercial purposes. For any
    commercial use, see http://www.baerbak.com/
 */
 
