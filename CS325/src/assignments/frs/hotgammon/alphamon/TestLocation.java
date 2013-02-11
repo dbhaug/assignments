@@ -1,5 +1,8 @@
 package assignments.frs.hotgammon.alphamon;
 import org.junit.*;
+
+import assignments.frs.hotgammon.Color;
+import assignments.frs.hotgammon.Location;
 import static org.junit.Assert.*;
 
 import java.util.Iterator;

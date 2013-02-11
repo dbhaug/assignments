@@ -1,5 +1,10 @@
 package assignments.frs.hotgammon.alphamon;
 
+import assignments.frs.hotgammon.Color;
+import assignments.frs.hotgammon.Game;
+import assignments.frs.hotgammon.Location;
+import assignments.frs.hotgammon.Triangle;
+
 /** Skeleton implementation of HotGammon.
 
    This source code is from the book 
@@ -17,12 +22,19 @@ package assignments.frs.hotgammon.alphamon;
    commercial use, see http://www.baerbak.com/
  */
 public class GameImpl implements Game {
-	private Color playerInTurn=Color.NONE;
+	private Color playerInTurn;
 	private Triangle[] board;
 	private int numberOfMoves;
-	private int turns=0;
+	private int turns;
+	private AlphaMoveValidator validator;
+	
+	public GameImpl(){
+		validator=new AlphaMoveValidator(this);
+	}
 	
 	public void newGame() {
+		turns=0;
+		playerInTurn=Color.NONE;
 		board=new Triangle[28];
 		for(int i=0;i<28;i++){
 			board[i]=new Triangle();
@@ -30,8 +42,12 @@ public class GameImpl implements Game {
 		board[Location.R1.ordinal()].setCount(2);
 		board[Location.R1.ordinal()].setColor(Color.BLACK);
 		board[Location.B1.ordinal()].setColor(Color.RED);
-		board[Location.B1.ordinal()].setCount(1);
+		board[Location.B1.ordinal()].setCount(2);
 		board[Location.R1.ordinal()].setCount(2);
+		board[Location.B6.ordinal()].setCount(5);
+		board[Location.B6.ordinal()].setColor(Color.BLACK);
+		board[Location.R6.ordinal()].setCount(5);
+		board[Location.R6.ordinal()].setColor(Color.RED);
 	}
 	public void nextTurn() {
 		playerInTurn=playerInTurn==Color.BLACK?Color.RED:Color.BLACK;
@@ -39,17 +55,23 @@ public class GameImpl implements Game {
 		turns++;
 	}
 	public boolean move(Location from, Location to) {
-		if(board[to.ordinal()].getColor().getSign()==-playerInTurn.getSign()){
+		if(!validator.isValid(from, to)){
 			return false;
 		}
 		if(board[from.ordinal()].getCount()<1){
 			return false;
 		}
-		if(numberOfMoves==0){
+		if(!makeSureMovesLeft()){
 			return false;
 		}
 		board[from.ordinal()].setCount(board[from.ordinal()].getCount()-1);
 		board[to.ordinal()].setCount(board[to.ordinal()].getCount()+1);
+		if(board[to.ordinal()].getColor()==Color.NONE){
+			board[to.ordinal()].setColor(playerInTurn);
+		}
+		if(board[from.ordinal()].getCount()<1){
+			board[from.ordinal()].setColor(Color.NONE);
+		}
 		numberOfMoves--;
 		return true;
 	}
@@ -68,12 +90,18 @@ public class GameImpl implements Game {
 	}
 	public int[] diceValuesLeft() { return new int []{}; }
 	public Color winner() {
-		return turns>6?Color.RED:Color.NONE;
+		return turns>5?Color.RED:Color.NONE;
 	}
 	public Color getColor(Location location) {
 		return board[location.ordinal()].getColor();
 	}
 	public int getCount(Location location) {
 		return board[location.ordinal()].getCount();
+	}
+	private boolean makeSureMovesLeft(){
+		if(numberOfMoves<=0){
+			return false;
+		}
+		return true;
 	}
 }

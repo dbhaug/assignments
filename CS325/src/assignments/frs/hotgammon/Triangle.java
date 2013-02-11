@@ -1,4 +1,5 @@
-package assignments.frs.hotgammon.alphamon;
+package assignments.frs.hotgammon;
+
 
 public class Triangle {
 	private int count=0;

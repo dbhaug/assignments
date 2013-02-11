@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import assignments.frs.hotgammon.Color;
+import assignments.frs.hotgammon.Game;
+import assignments.frs.hotgammon.Location;
+
 public class GameTests {
 	Game game;
 
@@ -211,7 +215,7 @@ public class GameTests {
 	@Test
 	public void shouldNotBeAbleToPlaceTwoDifferentColorsOnSameSquare() {
 		game.nextTurn();
-		game.move(Location.B6, Location.B2);
+		assertTrue(game.move(Location.B6, Location.B2));
 		game.nextTurn();
 		assertFalse(game.move(Location.B1, Location.B2));
 	}

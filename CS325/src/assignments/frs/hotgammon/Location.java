@@ -1,6 +1,7 @@
-package assignments.frs.hotgammon.alphamon;
+package assignments.frs.hotgammon;
 
 import java.util.Iterator;
+
 
 /**
  * This enum represents an enumeration of board locations (the "points") in the
