@@ -1,4 +1,4 @@
-package assignments.frs.hotgammon.alphamon;
+package assignments.frs.hotgammon.tests;
 import org.junit.*;
 
 import assignments.frs.hotgammon.Color;
@@ -23,7 +23,7 @@ import java.util.Iterator;
    distribute it for non-commercial purposes. For any 
    commercial use, see http://www.baerbak.com/
 */
-public class TestLocation {
+public class LocationTest {
 
   @Test
   public void shouldHaveProperNames() {
