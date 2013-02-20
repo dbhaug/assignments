@@ -54,5 +54,12 @@ public class BoardImpl implements Board {
 		board[loc.ordinal()].setCount(board[loc.ordinal()].getCount()-amount);
 		
 	}
+	@Override
+	public void clear() {
+		for (int i=0;i<board.length;i++){
+			board[i].setCount(0);
+			board[i].setColor(Color.NONE);
+		}
+	}
 
 }

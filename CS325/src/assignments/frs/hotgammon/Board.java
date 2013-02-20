@@ -7,4 +7,5 @@ public interface Board {
 	public void remove(Color player,Location loc, int amount);
 	public Color getColorAt(Location loc);
 	public int getCountAt(Location loc);
+	public void clear();
 }

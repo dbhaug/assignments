@@ -10,6 +10,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 
 @RunWith(Suite.class)
-@SuiteClasses({CoreTests.class, BetaMonTests.class, LocationTest.class} )
+@SuiteClasses({CoreTests.class, BetaMonTests.class, LocationTest.class, GammaMonTests.class, DeltaMonTests.class} )
 public class AllTests {
 }

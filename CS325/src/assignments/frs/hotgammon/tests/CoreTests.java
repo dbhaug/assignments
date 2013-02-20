@@ -14,8 +14,10 @@ import assignments.frs.hotgammon.Color;
 import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.MoveValidator;
 import assignments.frs.hotgammon.common.GameImpl;
-import assignments.frs.hotgammon.variants.AlphaMoveValidator;
-import assignments.frs.hotgammon.variants.BetaMoveValidator;
+import assignments.frs.hotgammon.movevalidators.SimpleMoveValidator;
+import assignments.frs.hotgammon.movevalidators.CompleteMoveValidator;
+import assignments.frs.hotgammon.turndeterminers.AlternatingTurnDeterminer;
+import assignments.frs.hotgammon.winnerdeterminers.SixMoveWinnerDeterminer;
 
 @RunWith(value = Parameterized.class)
 public class CoreTests {
@@ -25,15 +27,15 @@ public class CoreTests {
 	
 	
 	public CoreTests(MoveValidator validator) {
-		game = new GameImpl(validator);
+		game = new GameImpl(validator,new SixMoveWinnerDeterminer(), new AlternatingTurnDeterminer());
 		game.newGame();
 		
 	}
 	
 	 @Parameters
 	 public static Collection<Object[]> data() {
-	   Object[][] data = new Object[][] { { new AlphaMoveValidator() },
-			                              { new BetaMoveValidator() } };
+	   Object[][] data = new Object[][] { { new SimpleMoveValidator(), new SixMoveWinnerDeterminer(), new AlternatingTurnDeterminer() },
+			                              { new CompleteMoveValidator(), new SixMoveWinnerDeterminer(), new AlternatingTurnDeterminer() } };
 	   return Arrays.asList(data);
 	 }
 	 
@@ -64,7 +66,6 @@ public class CoreTests {
 			assertEquals(Color.BLACK, game.getColor(Location.R2));
 			assertEquals(1, game.getCount(Location.R1));
 			assertEquals(Color.BLACK, game.getColor(Location.R1));
-
 			assertEquals(1, game.getNumberOfMovesLeft());
 		}
 
@@ -83,31 +84,6 @@ public class CoreTests {
 		}
 
 		@Test
-		public void shouldBeZeroMovesAfterTwoConsecutive() {
-			game.nextTurn();
-			game.move(Location.R1, Location.R2);
-			game.move(Location.R1, Location.R2);
-			assertEquals(0, game.getNumberOfMovesLeft());
-		}
-
-		@Test
-		public void shouldBeRedTurnAfter2NextTurns() {
-			game.nextTurn();
-			game.nextTurn();
-			assertEquals(game.getPlayerInTurn(), Color.RED);
-			assertEquals(game.diceThrown()[0], 3);
-			assertEquals(game.diceThrown()[1], 4);
-		}
-
-		@Test
-		public void shouldBeRedWinnerAfterSixTurns() {
-			for (int i = 0; i < 6; i++) {
-				game.nextTurn();
-			}
-			assertTrue(game.winner() == Color.RED);
-		}
-
-		@Test
 		public void shouldBeNoWinnerAfterFourTurns() {
 			for (int i = 0; i < 4; i++) {
 				game.nextTurn();
@@ -116,30 +92,10 @@ public class CoreTests {
 		}
 
 		@Test
-		public void shouldRoll12Then34Then56Then12() {
-			game.nextTurn();
-			assertTrue(rollEquals(new int[] { 1, 2 }));
-			game.nextTurn();
-			assertTrue(rollEquals(new int[] { 3, 4 }));
-			game.nextTurn();
-			assertTrue(rollEquals(new int[] { 5, 6 }));
-			game.nextTurn();
-			assertTrue(rollEquals(new int[] { 1, 2 }));
-		}
-
-		@Test
 		public void shouldNotBeAbleToMoveIfNotInTurn() {
 			game.nextTurn();
 			assertFalse(game.move(Location.B1, Location.B2));
 			assertEquals(game.getNumberOfMovesLeft(), 2);
-		}
-
-		@Test
-		public void shouldNotBeAbleToMakeThreeMoves() {
-			game.nextTurn();
-			assertTrue(game.move(Location.R1, Location.R2));
-			assertTrue(game.move(Location.R2, Location.R3));
-			assertFalse(game.move(Location.R3, Location.R4));
 		}
 		
 		@Test
@@ -179,41 +135,10 @@ public class CoreTests {
 		}
 
 		@Test
-		public void shouldBeNoMovesLeftAfterMovingTwoBlackCheckersFromR1toR2() {
-			game.nextTurn();
-			game.move(Location.R1, Location.R2);
-			game.move(Location.R1, Location.R2);
-
-			assertEquals(0, game.getNumberOfMovesLeft());
-		}
-
-		@Test
 		public void shouldBeRedPlayerTurnAfterSecondNextTurn() {
 			game.nextTurn();
 			game.nextTurn();
 			assertEquals(Color.RED, game.getPlayerInTurn());
-		}
-
-		@Test
-		public void shouldBe3_4Die() {
-			game.nextTurn();
-			game.nextTurn();
-			int[] expected = { 3, 4 };
-			int[] actual = game.diceThrown();
-			assertEquals("Should be a 3", expected[0], actual[0]);
-			assertEquals("Should be a 4", expected[1], actual[1]);
-		}
-
-		@Test
-		public void shouldEndGameAfterSixTurns() {
-			game.nextTurn();
-			game.nextTurn();
-			game.nextTurn();
-			game.nextTurn();
-			game.nextTurn();
-			game.nextTurn();
-			assertEquals("Winner should be Red", Color.RED, game.winner());
-
 		}
 
 		@Test
@@ -228,30 +153,11 @@ public class CoreTests {
 		}
 
 		@Test
-		public void shouldHaveRedIsWinner() {
-			game.nextTurn();
-			game.nextTurn();
-			game.nextTurn();
-			game.nextTurn();
-			game.nextTurn();
-			game.nextTurn();
-			assertEquals("Winner should be Red", Color.RED, game.winner());
-
-		}
-
-		@Test
 		public void shouldNotBeAbleToPlaceTwoDifferentColorsOnSameSquare() {
 			game.nextTurn();
 			game.move(Location.B6, Location.B2);
 			game.nextTurn();
 			assertFalse(game.move(Location.B1, Location.B2));
-		}
-
-		@Test
-		public void shouldBeAbleToPlaceTwoSameColorPiecesOnSameSquare() {
-			game.nextTurn();
-			game.move(Location.R1, Location.R2);
-			assertTrue(game.move(Location.R1, Location.R2));
 		}
 
 		@Test
@@ -264,14 +170,6 @@ public class CoreTests {
 		public void shouldNotBeAbleToRemovePlayerOfWrongColor() {
 			game.nextTurn();
 			assertFalse("Should not be able to remove Red pieces.",
-					game.move(Location.B1, Location.B2));
-		}
-
-		@Test
-		public void shouldBeAbleToRemovePlayerOfRightColor() {
-			game.nextTurn();
-			game.nextTurn();
-			assertTrue("Should be able to remove Red pieces.",
 					game.move(Location.B1, Location.B2));
 		}
 
@@ -317,24 +215,6 @@ public class CoreTests {
 		}
 
 		@Test
-		public void diceRollsShouldBeIncremental() {
-			game.nextTurn();
-			assertArrayEquals(game.diceThrown(), new int[] { 1, 2 });
-			game.move(Location.R1, Location.R2);
-			game.move(Location.R1, Location.R3);
-			game.nextTurn();
-			assertArrayEquals(game.diceThrown(), new int[] { 3, 4 });
-			game.nextTurn();
-			assertArrayEquals(game.diceThrown(), new int[] { 5, 6 });
-			game.nextTurn();
-			assertArrayEquals(game.diceThrown(), new int[] { 1, 2 });
-			game.nextTurn();
-			assertArrayEquals(game.diceThrown(), new int[] { 3, 4 });
-			game.nextTurn();
-			assertArrayEquals(game.diceThrown(), new int[] { 5, 6 });
-		}
-
-		@Test
 		public void shouldNotBeAbleToMoveWithNoMovesLeft() {
 			game.nextTurn();
 			game.move(Location.R1, Location.R2);
@@ -349,19 +229,6 @@ public class CoreTests {
 		 * game.nextTurn(); assertTrue(game.winner() == Color.RED); }
 		 */
 
-		@Test
-		public void redShouldBeAbleToMove() {
-			game.nextTurn();
-			game.nextTurn();
-			assertTrue(game.move(Location.B1, Location.B2));
-		}
-
-		@Test
-		public void shouldNotBeAbleToMoveFromASpotWithoutCheckers() {
-			game.nextTurn();
-			assertFalse(game.move(Location.R2, Location.R3));
-		}
-
 		// Joe's Test
 		@Test
 		public void ShouldBeBlackToGoFirst() {
@@ -370,19 +237,6 @@ public class CoreTests {
 
 			assertEquals("Black is first to go", Color.BLACK,
 					game.getPlayerInTurn());
-
-		}
-
-		@Test
-		public void shouldRunOutOfMoves() {
-			// Needed to add nextTurn call
-			game.nextTurn();
-			game.move(Location.R1, Location.R2);
-
-			game.move(Location.R1, Location.R2);
-
-			assertEquals(" no moves should be left ", 0,
-					game.getNumberOfMovesLeft());
 
 		}
 
@@ -460,26 +314,6 @@ public class CoreTests {
 		 * }
 		 */
 
-		@Test
-		public void shouldEndGameAfter6Rolls() {
-
-			game.nextTurn();
-
-			game.nextTurn();
-
-			assertEquals("should not be a winner ", Color.NONE, game.winner());
-
-			game.nextTurn();
-
-			game.nextTurn();
-
-			game.nextTurn();
-
-			game.nextTurn();
-
-			assertEquals("should not be a winner ", Color.RED, game.winner());
-
-		}
 
 		@Test
 		public void shouldEndGameAfter5Rolls() {
@@ -546,15 +380,6 @@ public class CoreTests {
 		}
 
 		@Test
-		public void dieValuesAre34AfterNextTurnIsInvokedTheSecondTime() {
-
-			game.nextTurn();
-			game.nextTurn();
-			assertTrue(game.diceThrown()[0] == 3);
-			assertTrue(game.diceThrown()[1] == 4);
-		}
-
-		@Test
 		public void moveR1toB1isInvalidAsThereIsAnOpponentThere() {
 			game.nextTurn();
 			assertFalse(game.move(Location.R1, Location.B1));
@@ -591,23 +416,6 @@ public class CoreTests {
 		}
 
 		@Test
-		public void eachTurnThrowsCorrectNumberOfDice() {
-
-			game.nextTurn();
-			game.nextTurn();
-			game.nextTurn();
-			assertTrue(game.diceThrown()[0] == 5);
-			assertTrue(game.diceThrown()[1] == 6);
-			game.nextTurn();
-			assertTrue(game.diceThrown()[0] == 1);
-			assertTrue(game.diceThrown()[1] == 2);
-			game.nextTurn();
-			assertTrue(game.diceThrown()[0] == 3);
-			assertTrue(game.diceThrown()[1] == 4);
-
-		}
-
-		@Test
 		public void newGameResetsTheBoardToInitial() {
 			game.nextTurn();
 			game.nextTurn();
@@ -633,6 +441,141 @@ public class CoreTests {
 		}
 
 		@Test
+		public void shouldNotBeAbleToPlaceTwoDifferentCheckersInTheSameContainer() {
+
+			game.nextTurn();
+			assertFalse(game.move(Location.R12, Location.B1));
+		}
+
+		// Alpha Specific
+		/**
+		@Test
+		public void shouldBeRedTurnAfter2NextTurns() {
+			game.nextTurn();
+			game.nextTurn();
+			assertEquals(game.getPlayerInTurn(), Color.RED);
+			assertEquals(game.diceThrown()[0], 3);
+			assertEquals(game.diceThrown()[1], 4);
+		}
+		
+		@Test
+		public void shouldBeRedWinnerAfterSixTurns() {
+			for (int i = 0; i < 6; i++) {
+				game.nextTurn();
+			}
+			assertTrue(game.winner() == Color.RED);
+		}
+		
+		@Test
+		public void shouldRoll12Then34Then56Then12() {
+			game.nextTurn();
+			assertTrue(rollEquals(new int[] { 1, 2 }));
+			game.nextTurn();
+			assertTrue(rollEquals(new int[] { 3, 4 }));
+			game.nextTurn();
+			assertTrue(rollEquals(new int[] { 5, 6 }));
+			game.nextTurn();
+			assertTrue(rollEquals(new int[] { 1, 2 }));
+		}
+		
+		@Test
+		public void shouldBe3_4Die() {
+			game.nextTurn();
+			game.nextTurn();
+			int[] expected = { 3, 4 };
+			int[] actual = game.diceThrown();
+			assertEquals("Should be a 3", expected[0], actual[0]);
+			assertEquals("Should be a 4", expected[1], actual[1]);
+		}
+		
+		@Test
+		public void shouldEndGameAfterSixTurns() {
+			game.nextTurn();
+			game.nextTurn();
+			game.nextTurn();
+			game.nextTurn();
+			game.nextTurn();
+			game.nextTurn();
+			assertEquals("Winner should be Red", Color.RED, game.winner());
+		}
+		
+		@Test
+		public void shouldHaveRedIsWinner() {
+			game.nextTurn();
+			game.nextTurn();
+			game.nextTurn();
+			game.nextTurn();
+			game.nextTurn();
+			game.nextTurn();
+			assertEquals("Winner should be Red", Color.RED, game.winner());
+		}
+		
+		@Test
+		public void diceRollsShouldBeIncremental() {
+			game.nextTurn();
+			assertArrayEquals(game.diceThrown(), new int[] { 1, 2 });
+			game.move(Location.R1, Location.R2);
+			game.move(Location.R1, Location.R3);
+			game.nextTurn();
+			assertArrayEquals(game.diceThrown(), new int[] { 3, 4 });
+			game.nextTurn();
+			assertArrayEquals(game.diceThrown(), new int[] { 5, 6 });
+			game.nextTurn();
+			assertArrayEquals(game.diceThrown(), new int[] { 1, 2 });
+			game.nextTurn();
+			assertArrayEquals(game.diceThrown(), new int[] { 3, 4 });
+			game.nextTurn();
+			assertArrayEquals(game.diceThrown(), new int[] { 5, 6 });
+		}
+		
+		@Test
+		public void shouldEndGameAfter6Rolls() {
+
+			game.nextTurn();
+
+			game.nextTurn();
+
+			assertEquals("should not be a winner ", Color.NONE, game.winner());
+
+			game.nextTurn();
+
+			game.nextTurn();
+
+			game.nextTurn();
+
+			game.nextTurn();
+
+			assertEquals("should not be a winner ", Color.RED, game.winner());
+
+		}
+		
+		@Test
+		public void dieValuesAre34AfterNextTurnIsInvokedTheSecondTime() {
+
+			game.nextTurn();
+			game.nextTurn();
+			assertTrue(game.diceThrown()[0] == 3);
+			assertTrue(game.diceThrown()[1] == 4);
+		}
+
+		@Test
+		public void eachTurnThrowsCorrectNumberOfDice() {
+
+			game.nextTurn();
+			game.nextTurn();
+			game.nextTurn();
+			assertTrue(game.diceThrown()[0] == 5);
+			assertTrue(game.diceThrown()[1] == 6);
+			game.nextTurn();
+			assertTrue(game.diceThrown()[0] == 1);
+			assertTrue(game.diceThrown()[1] == 2);
+			game.nextTurn();
+			assertTrue(game.diceThrown()[0] == 3);
+			assertTrue(game.diceThrown()[1] == 4);
+
+		}
+		
+		@Test
 		public void redWinsAfter6Turns() {
 			game.nextTurn();
 			game.nextTurn();
@@ -643,23 +586,69 @@ public class CoreTests {
 			game.nextTurn();
 			assertTrue(game.winner() == Color.RED);
 		}
-
 		@Test
-		public void shouldNotBeAbleToPlaceTwoDifferentCheckersInTheSameContainer() {
-
+		public void redShouldBeAbleToMove() {
 			game.nextTurn();
-			assertFalse(game.move(Location.R12, Location.B1));
+			game.nextTurn();
+			assertTrue(game.move(Location.B1, Location.B2));
 		}
+		@Test
+		public void shouldBeZeroMovesAfterTwoConsecutive() {
+			game.nextTurn();
+			game.move(Location.R1, Location.R2);
+			game.move(Location.R1, Location.R2);
+			assertEquals(0, game.getNumberOfMovesLeft());
+		}
+		@Test
+		public void shouldNotBeAbleToMakeThreeMoves() {
+			game.nextTurn();
+			assertTrue(game.move(Location.R1, Location.R2));
+			assertTrue(game.move(Location.R2, Location.R3));
+			assertFalse(game.move(Location.R3, Location.R4));
+		}
+		@Test
+		public void shouldBeNoMovesLeftAfterMovingTwoBlackCheckersFromR1toR2() {
+			game.nextTurn();
+			game.move(Location.R1, Location.R2);
+			game.move(Location.R1, Location.R2);
 
+			assertEquals(0, game.getNumberOfMovesLeft());
+		}
+		@Test
+		public void shouldBeAbleToRemovePlayerOfRightColor() {
+			game.nextTurn();
+			game.nextTurn();
+			assertTrue("Should be able to remove Red pieces.",
+					game.move(Location.B1, Location.B2));
+		}
+		@Test
+		public void shouldRunOutOfMoves() {
+			// Needed to add nextTurn call
+			game.nextTurn();
+			game.move(Location.R1, Location.R2);
+
+			game.move(Location.R1, Location.R2);
+
+			assertEquals(" no moves should be left ", 0,
+					game.getNumberOfMovesLeft());
+
+		}
+		@Test
+		public void shouldBeAbleToPlaceTwoSameColorPiecesOnSameSquare() {
+			game.nextTurn();
+			game.move(Location.R1, Location.R2);
+			assertTrue(game.move(Location.R1, Location.R2));
+		}
+		@Test
+		public void shouldNotBeAbleToMoveFromASpotWithoutCheckers() {
+			game.nextTurn();
+			assertFalse(game.move(Location.R2, Location.R3));
+		}
 		@Test
 		public void shouldBeAbleToPlaceTheSameCheckersInOneContainer() {
 			game.nextTurn();
 			game.nextTurn();
 			assertTrue(game.move(Location.R6, Location.R8));
 		}
-
-
-
-
-
+		*/
 }
