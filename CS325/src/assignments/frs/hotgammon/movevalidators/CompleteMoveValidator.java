@@ -20,6 +20,7 @@ public class CompleteMoveValidator implements MoveValidator {
 				return false;
 			}
 		}
+		
 		if(occupiedByOpponent(to)){
 			return false;
 		}
