@@ -1,4 +1,4 @@
-package assignments.frs.hotgammon.movevalidators;
+package assignments.frs.hotgammon.variants.movevalidators;
 
 import assignments.frs.hotgammon.*;
 

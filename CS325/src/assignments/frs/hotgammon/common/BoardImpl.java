@@ -9,7 +9,7 @@ public class BoardImpl implements Board {
 	private Triangle[] board;
 	
 	public BoardImpl(){
-		board=new Triangle[28];
+		board=new Triangle[29];
 		for(int i=0;i<board.length;i++){
 			board[i]=new Triangle();
 		}
@@ -41,6 +41,7 @@ public class BoardImpl implements Board {
 		if(board[loc.ordinal()].getCount()<=1){
 			board[loc.ordinal()].setCount(0);
 			board[loc.ordinal()].setColor(Color.NONE);
+			return;
 		}
 		board[loc.ordinal()].setCount(board[loc.ordinal()].getCount()-1);
 	}
@@ -50,6 +51,7 @@ public class BoardImpl implements Board {
 		if(board[loc.ordinal()].getCount()<=amount){
 			board[loc.ordinal()].setCount(0);
 			board[loc.ordinal()].setColor(Color.NONE);
+			return;
 		}
 		board[loc.ordinal()].setCount(board[loc.ordinal()].getCount()-amount);
 		

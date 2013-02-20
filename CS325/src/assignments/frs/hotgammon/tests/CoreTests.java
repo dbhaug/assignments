@@ -14,10 +14,10 @@ import assignments.frs.hotgammon.Color;
 import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.MoveValidator;
 import assignments.frs.hotgammon.common.GameImpl;
-import assignments.frs.hotgammon.movevalidators.SimpleMoveValidator;
-import assignments.frs.hotgammon.movevalidators.CompleteMoveValidator;
-import assignments.frs.hotgammon.turndeterminers.AlternatingTurnDeterminer;
-import assignments.frs.hotgammon.winnerdeterminers.SixMoveWinnerDeterminer;
+import assignments.frs.hotgammon.variants.movevalidators.CompleteMoveValidator;
+import assignments.frs.hotgammon.variants.movevalidators.SimpleMoveValidator;
+import assignments.frs.hotgammon.variants.turndeterminers.AlternatingTurnDeterminer;
+import assignments.frs.hotgammon.variants.winnerdeterminers.SixMoveWinnerDeterminer;
 
 @RunWith(value = Parameterized.class)
 public class CoreTests {

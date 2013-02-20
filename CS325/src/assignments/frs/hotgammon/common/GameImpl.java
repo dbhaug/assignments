@@ -32,17 +32,17 @@ public class GameImpl implements Game {
 	private int numberOfMoves;
 	private int turns;
 	private MoveValidator validator;
-	private WinnerDeterminer winValidator;
-	private TurnDeterminer turnValidator;
+	private WinnerDeterminer winDeterminer;
+	private TurnDeterminer turnDeterminer;
 	private ArrayList<Integer> diceValuesLeft;
 	
-	public GameImpl(MoveValidator validator,WinnerDeterminer winValidator, TurnDeterminer turnValidator){
+	public GameImpl(MoveValidator validator,WinnerDeterminer winDeterminer, TurnDeterminer turnDeterminer){
 		this.validator=validator;
 		this.validator.setGame(this);
-		this.winValidator=winValidator;
-		this.winValidator.setGame(this);
-		this.turnValidator=turnValidator;
-		this.turnValidator.setGame(this);
+		this.winDeterminer=winDeterminer;
+		this.winDeterminer.setGame(this);
+		this.turnDeterminer=turnDeterminer;
+		this.turnDeterminer.setGame(this);
 	}
 	public void newGame() {
 		turns=0;
@@ -58,10 +58,10 @@ public class GameImpl implements Game {
 		board.put(Color.RED, Location.R6,5);
 	}
 	public void nextTurn() {
-		playerInTurn=turnValidator.getNextPlayerInTurn(playerInTurn);
+		playerInTurn=turnDeterminer.getNextPlayerInTurn(playerInTurn);
 		numberOfMoves = 2;
 		turns++;
-		winValidator.incrementTurn();
+		winDeterminer.incrementTurn();
 		diceValuesLeft=new ArrayList();
 		diceValuesLeft.add(new Integer(diceThrown()[0]));
 		diceValuesLeft.add(new Integer(diceThrown()[1]));
@@ -87,14 +87,16 @@ public class GameImpl implements Game {
 				break;
 			}
 		}
+		numberOfMoves--;
 		if(getColor(to).getSign()==-getPlayerInTurn().getSign()&&getCount(to)<2){
 			board.put(getColor(to), playerInTurn==Color.BLACK?Location.R_BAR:Location.B_BAR);
 			board.remove(getColor(to), to);
 			board.put(playerInTurn, to);
+			
+			return true;
 		}
 		board.remove(playerInTurn, from);
 		board.put(playerInTurn, to);
-		numberOfMoves--;
 		return true;
 	}
 	public Color getPlayerInTurn() { return playerInTurn; }
@@ -118,7 +120,7 @@ public class GameImpl implements Game {
 	    return ret;
 	}
 	public Color winner() {
-		return winValidator.getWinner();
+		return winDeterminer.getWinner();
 	}
 	public Color getColor(Location location) {
 		return board.getColorAt(location);

@@ -1,4 +1,4 @@
-package assignments.frs.hotgammon.movevalidators;
+package assignments.frs.hotgammon.variants.movevalidators;
 
 import assignments.frs.hotgammon.Color;
 import assignments.frs.hotgammon.Game;
@@ -20,7 +20,6 @@ public class CompleteMoveValidator implements MoveValidator {
 				return false;
 			}
 		}
-		
 		if(occupiedByOpponent(to)){
 			return false;
 		}
@@ -74,12 +73,12 @@ public class CompleteMoveValidator implements MoveValidator {
 		return false;
 	}
 	private boolean checkForStrayPiecesNotInInnerTable(Color player){
-		for(int i=18;i>0;i++){
+		for(int i=18;i>6;i--){
 			if(game.getCount(Location.values()[i])>0&&game.getColor(Location.values()[i])==player){
 				return false;
 			}
 		}
-		for(int i=player==Color.BLACK?18:6;i==(player==Color.BLACK?0:24);i++){
+		for(int i=player==Color.BLACK?18:7;i==(player==Color.BLACK?0:24);i++){
 			if(game.getCount(Location.values()[i])>0&&game.getColor(Location.values()[i])==player){
 				return false;
 			}
