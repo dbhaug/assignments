@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import assignments.frs.hotgammon.Board;
 import assignments.frs.hotgammon.Color;
 import assignments.frs.hotgammon.Game;
+import assignments.frs.hotgammon.HotGammonFactory;
 import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.MoveValidator;
+import assignments.frs.hotgammon.RollDeterminer;
 import assignments.frs.hotgammon.TurnDeterminer;
 import assignments.frs.hotgammon.WinnerDeterminer;
 
@@ -34,15 +36,17 @@ public class GameImpl implements Game {
 	private MoveValidator validator;
 	private WinnerDeterminer winDeterminer;
 	private TurnDeterminer turnDeterminer;
+	private RollDeterminer rollDeterminer;
 	private ArrayList<Integer> diceValuesLeft;
+	private HotGammonFactory factory;
 	
-	public GameImpl(MoveValidator validator,WinnerDeterminer winDeterminer, TurnDeterminer turnDeterminer){
-		this.validator=validator;
-		this.validator.setGame(this);
-		this.winDeterminer=winDeterminer;
-		this.winDeterminer.setGame(this);
-		this.turnDeterminer=turnDeterminer;
-		this.turnDeterminer.setGame(this);
+	public GameImpl(HotGammonFactory factory){
+		this.factory=factory;
+		this.factory.setGame(this);
+		winDeterminer=factory.getWinnerDeterminer();
+		turnDeterminer=factory.getTurnDeterminer();
+		rollDeterminer=factory.getRollDeterminer();
+		validator=factory.getMoveValidator();
 	}
 	public void newGame() {
 		turns=0;
@@ -61,7 +65,8 @@ public class GameImpl implements Game {
 		playerInTurn=turnDeterminer.getNextPlayerInTurn(playerInTurn);
 		numberOfMoves = 2;
 		turns++;
-		winDeterminer.incrementTurn();
+		winDeterminer.setTurns(turns);
+		rollDeterminer.setTurns(turns);
 		diceValuesLeft=new ArrayList();
 		diceValuesLeft.add(new Integer(diceThrown()[0]));
 		diceValuesLeft.add(new Integer(diceThrown()[1]));
@@ -104,13 +109,7 @@ public class GameImpl implements Game {
 		return numberOfMoves;
 	}
 	public int[] diceThrown() { 
-		if(turns%3==1){
-			return new int[] {1,2};
-		}else if(turns%3==2){
-			return new int[] {3,4};
-		}else{
-			return new int[] {5,6};
-		}
+		return rollDeterminer.getDiceThrown();
 	}
 	public int[] diceValuesLeft() {
 		int[] ret = new int[diceValuesLeft.size()];

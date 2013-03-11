@@ -11,18 +11,15 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import assignments.frs.hotgammon.Color;
+import assignments.frs.hotgammon.HotGammonFactory;
 import assignments.frs.hotgammon.Location;
-import assignments.frs.hotgammon.MoveValidator;
-import assignments.frs.hotgammon.TurnDeterminer;
-import assignments.frs.hotgammon.WinnerDeterminer;
 import assignments.frs.hotgammon.common.GameImpl;
 import assignments.frs.hotgammon.common.GameImpl.Placement;
-import assignments.frs.hotgammon.variants.movevalidators.SimpleMoveValidator;
-import assignments.frs.hotgammon.variants.movevalidators.CompleteMoveValidator;
-import assignments.frs.hotgammon.variants.turndeterminers.AceyDeuceyTurnDeterminer;
-import assignments.frs.hotgammon.variants.turndeterminers.AlternatingTurnDeterminer;
-import assignments.frs.hotgammon.variants.winnerdeterminers.BearOffWinnerDeterminer;
-import assignments.frs.hotgammon.variants.winnerdeterminers.SixMoveWinnerDeterminer;
+import assignments.frs.hotgammon.variants.factories.AlphaMon;
+import assignments.frs.hotgammon.variants.factories.BetaMon;
+import assignments.frs.hotgammon.variants.factories.DeltaMon;
+import assignments.frs.hotgammon.variants.factories.EpsilonMon;
+import assignments.frs.hotgammon.variants.factories.GammaMon;
 
 @RunWith(value = Parameterized.class)
 public class CoreTests {
@@ -30,8 +27,8 @@ public class CoreTests {
 	private GameImpl game;
 	
 	
-	public CoreTests(MoveValidator validator, WinnerDeterminer winnerDeterminer, TurnDeterminer ntd) {
-		game = new GameImpl(validator, winnerDeterminer, ntd);
+	public CoreTests(HotGammonFactory factory) {
+		game = new GameImpl(factory);
 		game.newGame();		
 	}
 	
@@ -39,13 +36,15 @@ public class CoreTests {
 	 public static Collection<Object[]> data() {
 	   Object[][] data = new Object[][] { 
 			   // AlphaMon		
-			   { new SimpleMoveValidator(), new SixMoveWinnerDeterminer(), new AlternatingTurnDeterminer() },
+			   { new AlphaMon()},
 			   // BetaMon
-			   { new CompleteMoveValidator(), new SixMoveWinnerDeterminer() , new AlternatingTurnDeterminer()},
+			   { new BetaMon()},
 			   // GammaMon
-			   { new SimpleMoveValidator(), new BearOffWinnerDeterminer() , new AlternatingTurnDeterminer()},
+			   { new GammaMon()},
 			   // DeltaMon
-			   { new SimpleMoveValidator(), new SixMoveWinnerDeterminer() , new AceyDeuceyTurnDeterminer()},
+			   { new DeltaMon()},
+			   // EpsilonMon
+			   { new EpsilonMon()}
 	   };
 	   return Arrays.asList(data);
 	 }
@@ -316,9 +315,9 @@ public class CoreTests {
 					new Placement(Color.BLACK, Location.R1)
 			});
 			game.nextTurn();
-			game.move(Location.R1, Location.R2);
+			assertTrue(game.move(Location.R1, Location.R2));
 
-			game.move(Location.R1, Location.R3);
+			assertTrue(game.move(Location.R1, Location.R3));
 
 			assertEquals(" no moves should be left ", 0,
 					game.getNumberOfMovesLeft());

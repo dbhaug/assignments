@@ -8,7 +8,9 @@ import org.junit.Test;
 import assignments.frs.hotgammon.Color;
 import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.common.GameImpl;
+import assignments.frs.hotgammon.variants.factories.GammaMon;
 import assignments.frs.hotgammon.variants.movevalidators.SimpleMoveValidator;
+import assignments.frs.hotgammon.variants.rollDeterminers.PairSequenceDeterminer;
 import assignments.frs.hotgammon.variants.turndeterminers.AlternatingTurnDeterminer;
 import assignments.frs.hotgammon.variants.winnerdeterminers.BearOffWinnerDeterminer;
 import assignments.frs.hotgammon.common.GameImpl.Placement;
@@ -19,9 +21,7 @@ public class GammaMonTests {
 
 	@Before
 	public void setup() {
-		game = new GameImpl(new SimpleMoveValidator(),
-				new BearOffWinnerDeterminer(),
-				new AlternatingTurnDeterminer());
+		game = new GameImpl(new GammaMon());
 		game.newGame();
 	}
 

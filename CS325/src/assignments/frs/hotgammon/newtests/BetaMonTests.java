@@ -8,9 +8,7 @@ import org.junit.Test;
 import assignments.frs.hotgammon.Color;
 import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.common.GameImpl;
-import assignments.frs.hotgammon.variants.movevalidators.CompleteMoveValidator;
-import assignments.frs.hotgammon.variants.turndeterminers.AlternatingTurnDeterminer;
-import assignments.frs.hotgammon.variants.winnerdeterminers.SixMoveWinnerDeterminer;
+import assignments.frs.hotgammon.variants.factories.BetaMon;
 
 public class BetaMonTests {
 	
@@ -18,7 +16,7 @@ public class BetaMonTests {
 
 	@Before
 	public void setup() { 
-		game = new GameImpl(new CompleteMoveValidator(), new SixMoveWinnerDeterminer(), new AlternatingTurnDeterminer());
+		game = new GameImpl(new BetaMon());
 		game.newGame();
 	}
 

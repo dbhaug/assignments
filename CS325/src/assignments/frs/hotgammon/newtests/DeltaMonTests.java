@@ -8,10 +8,8 @@ import org.junit.Test;
 
 import assignments.frs.hotgammon.Color;
 import assignments.frs.hotgammon.common.GameImpl;
+import assignments.frs.hotgammon.variants.factories.DeltaMon;
 
-import assignments.frs.hotgammon.variants.movevalidators.SimpleMoveValidator;
-import assignments.frs.hotgammon.variants.turndeterminers.AceyDeuceyTurnDeterminer;
-import assignments.frs.hotgammon.variants.winnerdeterminers.SixMoveWinnerDeterminer;
 
 public class DeltaMonTests {
 
@@ -19,7 +17,7 @@ public class DeltaMonTests {
 
 	@Before
 	public void setup() { 
-		game = new GameImpl(new SimpleMoveValidator(), new SixMoveWinnerDeterminer(), new AceyDeuceyTurnDeterminer());
+		game = new GameImpl(new DeltaMon());
 		game.newGame();
 	}
 	

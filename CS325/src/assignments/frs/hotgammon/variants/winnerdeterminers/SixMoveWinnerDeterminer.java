@@ -18,8 +18,8 @@ public class SixMoveWinnerDeterminer implements WinnerDeterminer {
 
 	}
 	@Override
-	public void incrementTurn() {
-		turns++;
+	public void setTurns(int turns) {
+		this.turns=turns;
 	}
 
 }

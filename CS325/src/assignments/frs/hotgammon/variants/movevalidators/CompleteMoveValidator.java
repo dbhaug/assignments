@@ -70,6 +70,7 @@ public class CompleteMoveValidator implements MoveValidator {
 				return true;
 			}
 		}
+		
 		return false;
 	}
 	private boolean checkForStrayPiecesNotInInnerTable(Color player){

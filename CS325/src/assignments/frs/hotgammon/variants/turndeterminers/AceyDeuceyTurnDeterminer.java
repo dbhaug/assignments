@@ -8,6 +8,9 @@ public class AceyDeuceyTurnDeterminer implements TurnDeterminer {
 	private Game game;
 	@Override
 	public Color getNextPlayerInTurn(Color currentPlayer) {
+		if(currentPlayer==Color.NONE){
+			return Color.BLACK;
+		}
 		boolean one=false;
 		boolean two=false;
 		for(int i=0;i<game.diceThrown().length;i++){
@@ -27,7 +30,5 @@ public class AceyDeuceyTurnDeterminer implements TurnDeterminer {
 	@Override
 	public void setGame(Game game) {
 		this.game=game;
-
 	}
-
 }

@@ -11,15 +11,20 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import assignments.frs.hotgammon.Color;
+import assignments.frs.hotgammon.HotGammonFactory;
 import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.MoveValidator;
+import assignments.frs.hotgammon.RollDeterminer;
 import assignments.frs.hotgammon.TurnDeterminer;
 import assignments.frs.hotgammon.WinnerDeterminer;
 import assignments.frs.hotgammon.common.GameImpl;
-import assignments.frs.hotgammon.common.GameImpl.Placement;
-import assignments.frs.hotgammon.variants.movevalidators.SimpleMoveValidator;
+import assignments.frs.hotgammon.common.GameImpl.*;
+import assignments.frs.hotgammon.variants.factories.AlphaMon;
+import assignments.frs.hotgammon.variants.factories.BetaMon;
+import assignments.frs.hotgammon.variants.factories.GammaMon;
 import assignments.frs.hotgammon.variants.movevalidators.CompleteMoveValidator;
-import assignments.frs.hotgammon.variants.turndeterminers.AceyDeuceyTurnDeterminer;
+import assignments.frs.hotgammon.variants.movevalidators.SimpleMoveValidator;
+import assignments.frs.hotgammon.variants.rollDeterminers.PairSequenceDeterminer;
 import assignments.frs.hotgammon.variants.turndeterminers.AlternatingTurnDeterminer;
 import assignments.frs.hotgammon.variants.winnerdeterminers.BearOffWinnerDeterminer;
 import assignments.frs.hotgammon.variants.winnerdeterminers.SixMoveWinnerDeterminer;
@@ -30,16 +35,16 @@ public class AlternatingTurnTests {
 	private GameImpl game;
 	
 	
-	public AlternatingTurnTests(MoveValidator validator, WinnerDeterminer winnerDeterminer, TurnDeterminer ntd) {
-		game = new GameImpl(validator, winnerDeterminer, ntd);
+	public AlternatingTurnTests(HotGammonFactory factory) {
+		game = new GameImpl(factory);
 		game.newGame();		
 	}
 	
 	 @Parameters
 	 public static Collection<Object[]> data() {
-	   Object[][] data = new Object[][] { { new SimpleMoveValidator(), new SixMoveWinnerDeterminer(), new AlternatingTurnDeterminer() },
-			                              { new CompleteMoveValidator(), new SixMoveWinnerDeterminer() , new AlternatingTurnDeterminer()},
-			                              { new SimpleMoveValidator(), new BearOffWinnerDeterminer() , new AlternatingTurnDeterminer()},
+	   Object[][] data = new Object[][] { { new AlphaMon()},
+			                              { new BetaMon()},
+			                              { new GammaMon()}
 			                            
 	   };
 	   return Arrays.asList(data);

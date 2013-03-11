@@ -26,7 +26,7 @@ public class BearOffWinnerDeterminer implements WinnerDeterminer {
 	}
 
 	@Override
-	public void incrementTurn() {
+	public void setTurns(int turns) {
 		// TODO Auto-generated method stub
 		
 	}

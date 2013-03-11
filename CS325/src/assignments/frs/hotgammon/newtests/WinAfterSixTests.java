@@ -10,38 +10,33 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
 import assignments.frs.hotgammon.Color;
-import assignments.frs.hotgammon.MoveValidator;
-import assignments.frs.hotgammon.TurnDeterminer;
-import assignments.frs.hotgammon.WinnerDeterminer;
+import assignments.frs.hotgammon.HotGammonFactory;
 import assignments.frs.hotgammon.common.GameImpl;
-import assignments.frs.hotgammon.variants.movevalidators.SimpleMoveValidator;
-import assignments.frs.hotgammon.variants.movevalidators.CompleteMoveValidator;
-import assignments.frs.hotgammon.variants.turndeterminers.AceyDeuceyTurnDeterminer;
-import assignments.frs.hotgammon.variants.turndeterminers.AlternatingTurnDeterminer;
-import assignments.frs.hotgammon.variants.winnerdeterminers.SixMoveWinnerDeterminer;
+import assignments.frs.hotgammon.variants.factories.AlphaMon;
+import assignments.frs.hotgammon.variants.factories.BetaMon;
+import assignments.frs.hotgammon.variants.factories.DeltaMon;
+
 
 @RunWith(value = Parameterized.class)
 public class WinAfterSixTests {
 	private GameImpl game;
 	
-	public WinAfterSixTests(MoveValidator validator, WinnerDeterminer winnerDeterminer, TurnDeterminer ntd) {
-		game = new GameImpl(validator, winnerDeterminer, ntd);
+	public WinAfterSixTests(HotGammonFactory factory) {
+		game = new GameImpl(factory);
 		game.newGame();		
 	}
 	 @Parameters
 	 public static Collection<Object[]> data() {
-	   Object[][] data = new Object[][] { { new SimpleMoveValidator(), new SixMoveWinnerDeterminer(), new AlternatingTurnDeterminer() },
-			                              { new CompleteMoveValidator(), new SixMoveWinnerDeterminer() , new AlternatingTurnDeterminer()},
-			                              { new SimpleMoveValidator(), new SixMoveWinnerDeterminer() , new AceyDeuceyTurnDeterminer()},
+	   Object[][] data = new Object[][] { {new AlphaMon()},
+			                              {new BetaMon()},
+			                              {new DeltaMon()},
 	   };
 	   return Arrays.asList(data);
 	 }
 
 	@Before
 	public void setup() { 
-		game = new GameImpl(new CompleteMoveValidator(), new SixMoveWinnerDeterminer(), new AlternatingTurnDeterminer());
 		game.newGame();
 	}
 
@@ -145,7 +140,7 @@ public class WinAfterSixTests {
 		game.nextTurn();
 		assertTrue(game.winner() == Color.NONE);
 		game.nextTurn();
-		assertTrue(game.winner() == Color.RED);
+		assertEquals(game.winner(),Color.RED);
 	}
 
 }
