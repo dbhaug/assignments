@@ -39,14 +39,10 @@ public class GameImpl implements Game {
 	private RollDeterminer rollDeterminer;
 	private ArrayList<Integer> diceValuesLeft;
 	private HotGammonFactory factory;
+	private int[] diceValues;
 	
 	public GameImpl(HotGammonFactory factory){
-		this.factory=factory;
-		this.factory.setGame(this);
-		winDeterminer=factory.getWinnerDeterminer();
-		turnDeterminer=factory.getTurnDeterminer();
-		rollDeterminer=factory.getRollDeterminer();
-		validator=factory.getMoveValidator();
+		setup(factory);
 	}
 	public void newGame() {
 		turns=0;
@@ -61,7 +57,16 @@ public class GameImpl implements Game {
 		board.put(Color.BLACK, Location.B6,5);
 		board.put(Color.RED, Location.R6,5);
 	}
+	public void setup(HotGammonFactory factory) {
+		this.factory=factory;
+		this.factory.setGame(this);
+		winDeterminer=factory.getWinnerDeterminer();
+		turnDeterminer=factory.getTurnDeterminer();
+		rollDeterminer=factory.getRollDeterminer();
+		validator=factory.getMoveValidator();
+	}
 	public void nextTurn() {
+		diceValues=null;
 		playerInTurn=turnDeterminer.getNextPlayerInTurn(playerInTurn);
 		numberOfMoves = 2;
 		turns++;
@@ -70,6 +75,12 @@ public class GameImpl implements Game {
 		diceValuesLeft=new ArrayList();
 		diceValuesLeft.add(new Integer(diceThrown()[0]));
 		diceValuesLeft.add(new Integer(diceThrown()[1]));
+		if(diceThrown()[0]==diceThrown()[1]){
+			diceValuesLeft.add(new Integer(diceThrown()[0]));
+			diceValuesLeft.add(new Integer(diceThrown()[1]));
+			numberOfMoves=4;
+		}
+		
 	}
 	static public class Placement {
         public Location location;
@@ -108,8 +119,12 @@ public class GameImpl implements Game {
 	public int getNumberOfMovesLeft() {
 		return numberOfMoves;
 	}
-	public int[] diceThrown() { 
-		return rollDeterminer.getDiceThrown();
+	public int[] diceThrown() {
+		if(diceValues==null){
+			diceValues=rollDeterminer.getDiceThrown();
+		}
+		return diceValues;
+		
 	}
 	public int[] diceValuesLeft() {
 		int[] ret = new int[diceValuesLeft.size()];

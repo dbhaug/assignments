@@ -9,7 +9,7 @@ public class AceyDeuceyTurnDeterminer implements TurnDeterminer {
 	@Override
 	public Color getNextPlayerInTurn(Color currentPlayer) {
 		if(currentPlayer==Color.NONE){
-			return Color.BLACK;
+			return currentPlayer==Color.BLACK?Color.RED:Color.BLACK;
 		}
 		boolean one=false;
 		boolean two=false;
