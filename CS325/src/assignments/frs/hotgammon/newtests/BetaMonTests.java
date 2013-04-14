@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import assignments.frs.hotgammon.Color;
-import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.common.GameImpl;
+import assignments.frs.hotgammon.framework.Color;
+import assignments.frs.hotgammon.framework.Location;
 import assignments.frs.hotgammon.variants.factories.BetaMon;
 
 public class BetaMonTests {

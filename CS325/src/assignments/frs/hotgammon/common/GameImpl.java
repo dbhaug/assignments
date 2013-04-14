@@ -3,14 +3,15 @@ package assignments.frs.hotgammon.common;
 import java.util.ArrayList;
 
 import assignments.frs.hotgammon.Board;
-import assignments.frs.hotgammon.Color;
-import assignments.frs.hotgammon.Game;
 import assignments.frs.hotgammon.HotGammonFactory;
-import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.MoveValidator;
 import assignments.frs.hotgammon.RollDeterminer;
 import assignments.frs.hotgammon.TurnDeterminer;
 import assignments.frs.hotgammon.WinnerDeterminer;
+import assignments.frs.hotgammon.framework.Color;
+import assignments.frs.hotgammon.framework.Game;
+import assignments.frs.hotgammon.framework.GameObserver;
+import assignments.frs.hotgammon.framework.Location;
 
 /** Skeleton implementation of HotGammon.
 
@@ -40,6 +41,7 @@ public class GameImpl implements Game {
 	private ArrayList<Integer> diceValuesLeft;
 	private HotGammonFactory factory;
 	private int[] diceValues;
+	private ArrayList<GameObserver> gameObservers;
 	
 	public GameImpl(HotGammonFactory factory){
 		setup(factory);
@@ -64,6 +66,7 @@ public class GameImpl implements Game {
 		turnDeterminer=factory.getTurnDeterminer();
 		rollDeterminer=factory.getRollDeterminer();
 		validator=factory.getMoveValidator();
+		gameObservers=new ArrayList<GameObserver>();
 	}
 	public void nextTurn() {
 		diceValues=null;
@@ -157,4 +160,9 @@ public class GameImpl implements Game {
             board.put(placements[i].player, placements[i].location);
         }
     }
+	@Override
+	public void addObserver(GameObserver observer) {
+		gameObservers.add(observer);
+		
+	}
 }

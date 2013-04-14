@@ -1,6 +1,8 @@
 package assignments.frs.hotgammon.variants.movevalidators;
 
 import assignments.frs.hotgammon.*;
+import assignments.frs.hotgammon.framework.Game;
+import assignments.frs.hotgammon.framework.Location;
 
 public class SimpleMoveValidator implements MoveValidator {
 	private Game game;

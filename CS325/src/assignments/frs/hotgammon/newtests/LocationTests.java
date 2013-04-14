@@ -1,8 +1,8 @@
 package assignments.frs.hotgammon.newtests;
 import org.junit.*;
 
-import assignments.frs.hotgammon.Color;
-import assignments.frs.hotgammon.Location;
+import assignments.frs.hotgammon.framework.Color;
+import assignments.frs.hotgammon.framework.Location;
 
 import static org.junit.Assert.*;
 

@@ -1,5 +1,7 @@
 package assignments.frs.hotgammon;
 
+import assignments.frs.hotgammon.framework.Color;
+
 
 public class Triangle {
 	private int count=0;

@@ -1,9 +1,9 @@
 package assignments.frs.hotgammon.variants.movevalidators;
 
-import assignments.frs.hotgammon.Color;
-import assignments.frs.hotgammon.Game;
-import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.MoveValidator;
+import assignments.frs.hotgammon.framework.Color;
+import assignments.frs.hotgammon.framework.Game;
+import assignments.frs.hotgammon.framework.Location;
 
 public class CompleteMoveValidator implements MoveValidator {
 	private Game game;

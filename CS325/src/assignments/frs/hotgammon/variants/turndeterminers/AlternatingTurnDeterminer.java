@@ -1,8 +1,8 @@
 package assignments.frs.hotgammon.variants.turndeterminers;
 
-import assignments.frs.hotgammon.Color;
-import assignments.frs.hotgammon.Game;
 import assignments.frs.hotgammon.TurnDeterminer;
+import assignments.frs.hotgammon.framework.Color;
+import assignments.frs.hotgammon.framework.Game;
 
 public class AlternatingTurnDeterminer implements TurnDeterminer{
 	Game game;

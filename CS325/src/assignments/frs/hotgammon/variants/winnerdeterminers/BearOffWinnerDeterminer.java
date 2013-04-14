@@ -1,9 +1,9 @@
 package assignments.frs.hotgammon.variants.winnerdeterminers;
 
-import assignments.frs.hotgammon.Color;
-import assignments.frs.hotgammon.Game;
-import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.WinnerDeterminer;
+import assignments.frs.hotgammon.framework.Color;
+import assignments.frs.hotgammon.framework.Game;
+import assignments.frs.hotgammon.framework.Location;
 
 public class BearOffWinnerDeterminer implements WinnerDeterminer {
 	private Game game;

@@ -1,5 +1,8 @@
 package assignments.frs.hotgammon;
 
+import assignments.frs.hotgammon.framework.Color;
+import assignments.frs.hotgammon.framework.Location;
+
 public interface Board {
 	public void put(Color player,Location loc);
 	public void put(Color player,Location loc,int amount);

@@ -1,11 +1,11 @@
 package assignments.frs.hotgammon.variants.factories;
 
-import assignments.frs.hotgammon.Game;
 import assignments.frs.hotgammon.HotGammonFactory;
 import assignments.frs.hotgammon.MoveValidator;
 import assignments.frs.hotgammon.RollDeterminer;
 import assignments.frs.hotgammon.TurnDeterminer;
 import assignments.frs.hotgammon.WinnerDeterminer;
+import assignments.frs.hotgammon.framework.Game;
 import assignments.frs.hotgammon.variants.movevalidators.CompleteMoveValidator;
 import assignments.frs.hotgammon.variants.rollDeterminers.RandomRollDeterminer;
 import assignments.frs.hotgammon.variants.turndeterminers.AlternatingTurnDeterminer;

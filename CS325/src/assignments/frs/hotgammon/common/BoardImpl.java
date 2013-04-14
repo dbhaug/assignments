@@ -1,9 +1,9 @@
 package assignments.frs.hotgammon.common;
 
 import assignments.frs.hotgammon.Board;
-import assignments.frs.hotgammon.Color;
-import assignments.frs.hotgammon.Location;
 import assignments.frs.hotgammon.Triangle;
+import assignments.frs.hotgammon.framework.Color;
+import assignments.frs.hotgammon.framework.Location;
 
 public class BoardImpl implements Board {
 	private Triangle[] board;

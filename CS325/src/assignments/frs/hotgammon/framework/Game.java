@@ -1,4 +1,4 @@
-package assignments.frs.hotgammon;
+package assignments.frs.hotgammon.framework;
 
 
 /** This interface encapsulate all responsibilites of
@@ -116,5 +116,7 @@ public interface Game {
    * @return a integer value showing the number of checkers on this location.
    */
   public int getCount(Location location);
+  
+  public void addObserver(GameObserver observer);
   
 }

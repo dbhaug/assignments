@@ -1,4 +1,4 @@
-package assignments.frs.hotgammon;
+package assignments.frs.hotgammon.framework;
 
 import java.util.Iterator;
 
