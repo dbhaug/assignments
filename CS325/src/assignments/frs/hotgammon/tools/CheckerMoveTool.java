@@ -25,17 +25,15 @@ public class CheckerMoveTool extends AbstractTool {
 	private Location fLastLoc;
 	private Game game;
 
-	public CheckerMoveTool(DrawingEditor editor, Game game) {
+	public CheckerMoveTool(DrawingEditor editor, Game game, Figure figure) {
 		super(editor);
 		this.game=game;
+		this.figure=figure;
 	}
 	
 	@Override
 	public void mouseDown(MouseEvent e, int x, int y) {
 		Drawing model = editor().drawing();
-
-	    model.lock();
-		figure = model.findFigure(e.getX(), e.getY());
 		if(figure instanceof DieFigure){
 			model.clearSelection();
 			figure=null;
@@ -72,7 +70,7 @@ public class CheckerMoveTool extends AbstractTool {
 				f.moveBy(point.x-f.displayBox().x,point.y-f.displayBox().y);
 			}
 		}else {
-			Point oldPoint=Convert.locationAndCount2xy(fLastLoc, game.getCount(fLastLoc));
+			Point oldPoint=Convert.locationAndCount2xy(fLastLoc, game.getCount(fLastLoc)-1);
 			for (Figure f :editor().drawing().selection()){
 				f.moveBy(oldPoint.x-f.displayBox().x,oldPoint.y-f.displayBox().y);
 			}

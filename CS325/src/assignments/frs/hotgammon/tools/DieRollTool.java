@@ -19,7 +19,6 @@ public class DieRollTool extends AbstractTool {
 	}
 	public void mouseDown(MouseEvent e, int x,int y){
 		Drawing model=editor().drawing();
-		model.lock();
 		Figure figure=model.findFigure(e.getX(),e.getY());
 		if(figure instanceof DieFigure){
 			game.nextTurn();

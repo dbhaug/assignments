@@ -9,7 +9,7 @@ import javax.swing.*;
 import assignments.frs.hotgammon.framework.Game;
 import assignments.frs.hotgammon.tests.stub.StubGame1;
 import assignments.frs.hotgammon.tools.CheckerMoveTool;
-import assignments.frs.hotgammon.tools.DieRollTool;
+import assignments.frs.hotgammon.tools.HotGammonTool;
 import assignments.frs.hotgammon.view.CheckerFigure;
 import assignments.frs.hotgammon.view.DieFigure;
 
@@ -38,6 +38,8 @@ public class ShowCheckersAndDice {
                                new HotGammonFactory() );
     editor.open();
     Game game=new StubGame1();
+    game.newGame();
+    game.nextTurn();
 
     DieFigure redDie = new DieFigure("die4", new Point(216, 202));
     DieFigure blackDie = new DieFigure("die2", new Point(306, 202));
@@ -49,7 +51,7 @@ public class ShowCheckersAndDice {
     CheckerFigure rc = new CheckerFigure("redchecker", new Point(507,390));
     editor.drawing().add(rc);
 
-    editor.setTool( new DieRollTool(editor, game) );
+    editor.setTool( new HotGammonTool(editor, game) );
 
   }
 }
