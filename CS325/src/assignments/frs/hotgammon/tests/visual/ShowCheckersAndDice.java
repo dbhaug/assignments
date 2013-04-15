@@ -6,6 +6,13 @@ import minidraw.framework.*;
 import java.awt.*;
 import javax.swing.*;
 
+import assignments.frs.hotgammon.framework.Game;
+import assignments.frs.hotgammon.tests.stub.StubGame1;
+import assignments.frs.hotgammon.tools.CheckerMoveTool;
+import assignments.frs.hotgammon.tools.DieRollTool;
+import assignments.frs.hotgammon.view.CheckerFigure;
+import assignments.frs.hotgammon.view.DieFigure;
+
 /** Show the dice and some checkers on the
  * backgammon board.  
  * 
@@ -30,18 +37,19 @@ public class ShowCheckersAndDice {
       new MiniDrawApplication( "Show HotGammon figures...",  
                                new HotGammonFactory() );
     editor.open();
+    Game game=new StubGame1();
 
-    Figure redDie = new ImageFigure("die4", new Point(216, 202));
-    Figure blackDie = new ImageFigure("die2", new Point(306, 202));
+    DieFigure redDie = new DieFigure("die4", new Point(216, 202));
+    DieFigure blackDie = new DieFigure("die2", new Point(306, 202));
     editor.drawing().add(redDie);
     editor.drawing().add(blackDie);
     
-    Figure bc = new ImageFigure("blackchecker", new Point(21,21));
+    CheckerFigure bc = new CheckerFigure("blackchecker", new Point(21,21));
     editor.drawing().add(bc);
-    Figure rc = new ImageFigure("redchecker", new Point(507,390));
+    CheckerFigure rc = new CheckerFigure("redchecker", new Point(507,390));
     editor.drawing().add(rc);
 
-    editor.setTool( new SelectionTool(editor) );
+    editor.setTool( new DieRollTool(editor, game) );
 
   }
 }
