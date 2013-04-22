@@ -9,10 +9,16 @@ public class CompleteMoveValidator implements MoveValidator {
 	private Game game;
 	@Override
 	public boolean isValid(Location from, Location to) {
+		if(game.getPlayerInTurn()==Color.NONE&&(from==Location.R_BEAR_OFF||from==Location.B_BEAR_OFF)){
+			System.out.println("Treated as game starting move");
+			return true;
+		}
 		if(!isCorrectDirection(from, to)){
+			System.out.println("Incorrect Direction");
 			return false;
 		}
 		if(!hasDiceRollLeftForMove(from,to)){
+			System.out.println("No Corresponding Die Rolls");
 			return false;
 		}
 		if(to==Location.R_BEAR_OFF||to==Location.B_BEAR_OFF){
@@ -21,17 +27,26 @@ public class CompleteMoveValidator implements MoveValidator {
 			}
 		}
 		if(occupiedByOpponent(to)){
+			System.out.println("Opponent is here");
 			return false;
 		}
 		if(!isTherePieceAt(from)){
+			System.out.println("No origin piece");
 			return false;
 		}
 		if(!correctCheckerForPlayerInTurn(from)){
+			System.out.println("Not your Piece. You are "+game.getPlayerInTurn().toString()+". This piece is "+ game.getColor(from));
 			return false;
 		}
 		if(anyBarPieces()&&from!=(game.getPlayerInTurn()==Color.BLACK?Location.B_BAR:Location.R_BAR)){
+			System.out.println("Pieces in the bar");
 			return false;
 		}
+		if(!makeSureMovesLeft()){
+			System.out.println("No Moves left");
+			return false;
+		}
+		System.out.println("good");
 		return true;
 	}
 	private boolean isCorrectDirection(Location from, Location to){
@@ -92,6 +107,14 @@ public class CompleteMoveValidator implements MoveValidator {
 		}
 		return false;
 	}
+	
+	private boolean makeSureMovesLeft(){
+		if(game.getNumberOfMovesLeft()<=0){
+			return false;
+		}
+		return true;
+	}
+	
 	@Override
 	public void setGame(Game game) {
 		this.game=game;

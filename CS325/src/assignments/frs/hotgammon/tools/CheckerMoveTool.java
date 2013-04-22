@@ -63,7 +63,8 @@ public class CheckerMoveTool extends AbstractTool {
 	}
 	@Override
 	public void mouseUp(MouseEvent e, int x, int y) {
-		Location newLoc=Convert.xy2Location(x, y);
+		if(figure!=null){
+			Location newLoc=Convert.xy2Location(x, y);
 		Point point=Convert.locationAndCount2xy(newLoc, game.getCount(newLoc));
 		if(game.move(fLastLoc, newLoc)){
 			for (Figure f :editor().drawing().selection()){
@@ -77,5 +78,6 @@ public class CheckerMoveTool extends AbstractTool {
 		}
 		editor().drawing().clearSelection();
 		editor().drawing().unlock();
+		}
 	}
 }

@@ -22,6 +22,7 @@ import assignments.frs.hotgammon.framework.Location;
    commercial use, see http://www.baerbak.com/
  */
 public class StubGame1 implements Game {
+	GameObserver gO;
 
   public StubGame1() {
     newGame();
@@ -51,6 +52,7 @@ public class StubGame1 implements Game {
     movesLeft = 2;
     tictac = !tictac;
     System.out.println("nextTurn: " + turn);
+    gO.diceRolled(diceThrown());
   }
 
   /** for testing purposes location B3 and R3 are
@@ -69,6 +71,7 @@ public class StubGame1 implements Game {
       return false;
     }
     movesLeft--;
+    gO.checkerMove(from, to);
     return true;
   }
 
@@ -125,5 +128,7 @@ public class StubGame1 implements Game {
     return sum;
   }
 
-  public void addObserver(GameObserver gl) { }
+  public void addObserver(GameObserver gl) { 
+	  gO=gl;
+  }
 }

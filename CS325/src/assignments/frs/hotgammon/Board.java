@@ -11,4 +11,5 @@ public interface Board {
 	public Color getColorAt(Location loc);
 	public int getCountAt(Location loc);
 	public void clear();
+	public void setColor(Color player,Location loc);
 }

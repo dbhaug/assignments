@@ -12,42 +12,39 @@ import assignments.frs.hotgammon.variants.turndeterminers.AlternatingTurnDetermi
 import assignments.frs.hotgammon.variants.winnerdeterminers.BearOffWinnerDeterminer;
 
 public class SemiMon implements HotGammonFactory {
-	private MoveValidator mValidator;
-	private TurnDeterminer tDeterminer;
-	private WinnerDeterminer wDeterminer;
-	private RollDeterminer rDeterminer;
-	
-	public SemiMon(){
-		mValidator=new CompleteMoveValidator();
-		tDeterminer=new AlternatingTurnDeterminer();
-		wDeterminer=new BearOffWinnerDeterminer();
-		rDeterminer=new RandomRollDeterminer();
-	}
+
+	private Game game;
 
 	@Override
 	public MoveValidator getMoveValidator() {
+		MoveValidator mValidator=new CompleteMoveValidator();
+		mValidator.setGame(game);
 		return mValidator;
+		
 	}
 
 	@Override
 	public TurnDeterminer getTurnDeterminer() {
+		TurnDeterminer tDeterminer=new AlternatingTurnDeterminer();
+		tDeterminer.setGame(game);
 		return tDeterminer;
 	}
 
 	@Override
 	public WinnerDeterminer getWinnerDeterminer() {
+		WinnerDeterminer wDeterminer=new BearOffWinnerDeterminer();
+		wDeterminer.setGame(game);
 		return wDeterminer;
 	}
 
 	@Override
 	public RollDeterminer getRollDeterminer() {
+		RollDeterminer rDeterminer=new RandomRollDeterminer();
 		return rDeterminer;
 	}
 
 	@Override
 	public void setGame(Game game) {
-		wDeterminer.setGame(game);
-		tDeterminer.setGame(game);
-		mValidator.setGame(game);
+		this.game=game;
 	}
 }

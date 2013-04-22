@@ -50,14 +50,46 @@ public class GameImpl implements Game {
 		turns=0;
 		playerInTurn=Color.NONE;
 		board=new BoardImpl();
-		board.put(Color.BLACK,Location.R1,2);
-		board.put(Color.RED,Location.R8,3);
-		board.put(Color.BLACK,Location.R12,5);
-		board.put(Color.RED,Location.B12,5);
-		board.put(Color.BLACK,Location.B8,3);
-		board.put(Color.RED, Location.B1,2);
-		board.put(Color.BLACK, Location.B6,5);
-		board.put(Color.RED, Location.R6,5);
+		board.put(Color.BLACK, Location.R_BEAR_OFF,15);
+		board.put(Color.RED, Location.B_BEAR_OFF,15);
+		move(Location.R_BEAR_OFF,Location.R1);
+		move(Location.R_BEAR_OFF,Location.R1);
+		move(Location.R_BEAR_OFF,Location.R12);
+		move(Location.R_BEAR_OFF,Location.R12);
+		move(Location.R_BEAR_OFF,Location.R12);
+		move(Location.R_BEAR_OFF,Location.R12);
+		move(Location.R_BEAR_OFF,Location.R12);
+		move(Location.R_BEAR_OFF,Location.B8);
+		move(Location.R_BEAR_OFF,Location.B8);
+		move(Location.R_BEAR_OFF,Location.B8);
+		move(Location.R_BEAR_OFF,Location.B6);
+		move(Location.R_BEAR_OFF,Location.B6);
+		move(Location.R_BEAR_OFF,Location.B6);
+		move(Location.R_BEAR_OFF,Location.B6);
+		move(Location.R_BEAR_OFF,Location.B6);
+		board.setColor(Color.BLACK, Location.R1);
+		board.setColor(Color.BLACK, Location.R12);
+		board.setColor(Color.BLACK, Location.B8);
+		board.setColor(Color.BLACK, Location.B6);
+		move(Location.B_BEAR_OFF,Location.R8);
+		move(Location.B_BEAR_OFF,Location.R8);
+		move(Location.B_BEAR_OFF,Location.R8);
+		move(Location.B_BEAR_OFF,Location.B12);
+		move(Location.B_BEAR_OFF,Location.B12);
+		move(Location.B_BEAR_OFF,Location.B12);
+		move(Location.B_BEAR_OFF,Location.B12);
+		move(Location.B_BEAR_OFF,Location.B12);
+		move(Location.B_BEAR_OFF,Location.B1);
+		move(Location.B_BEAR_OFF,Location.B1);
+		move(Location.B_BEAR_OFF,Location.R6);
+		move(Location.B_BEAR_OFF,Location.R6);
+		move(Location.B_BEAR_OFF,Location.R6);
+		move(Location.B_BEAR_OFF,Location.R6);
+		move(Location.B_BEAR_OFF,Location.R6);
+		board.setColor(Color.RED, Location.B1);
+		board.setColor(Color.RED, Location.R8);
+		board.setColor(Color.RED, Location.B12);
+		board.setColor(Color.RED, Location.R6);
 	}
 	public void setup(HotGammonFactory factory) {
 		this.factory=factory;
@@ -78,6 +110,9 @@ public class GameImpl implements Game {
 		diceValuesLeft=new ArrayList();
 		diceValuesLeft.add(new Integer(diceThrown()[0]));
 		diceValuesLeft.add(new Integer(diceThrown()[1]));
+		for(GameObserver g:gameObservers){
+			g.diceRolled(diceThrown());
+		}
 		if(diceThrown()[0]==diceThrown()[1]){
 			diceValuesLeft.add(new Integer(diceThrown()[0]));
 			diceValuesLeft.add(new Integer(diceThrown()[1]));
@@ -97,31 +132,43 @@ public class GameImpl implements Game {
 		if(!validator.isValid(from, to)){
 			return false;
 		}
-		if(!makeSureMovesLeft()){
-			return false;
-		}
-		for(int i:diceValuesLeft){
-			if(Math.abs(Location.distance(from, to))==i){
-				diceValuesLeft.remove(new Integer(i));
-				break;
+		if(from!=Location.B_BEAR_OFF&&from!=Location.R_BEAR_OFF){
+			for(int i:diceValuesLeft){
+				if(Math.abs(Location.distance(from, to))==i){
+					diceValuesLeft.remove(new Integer(i));
+					break;
+				}
 			}
+			numberOfMoves--;
 		}
-		numberOfMoves--;
-		if(getColor(to).getSign()==-getPlayerInTurn().getSign()&&getCount(to)<2){
+		
+		if(getColor(to).getSign()==-getPlayerInTurn().getSign()&&getCount(to)<2&&playerInTurn!=Color.NONE){
 			board.put(getColor(to), playerInTurn==Color.BLACK?Location.R_BAR:Location.B_BAR);
 			board.remove(getColor(to), to);
 			board.put(playerInTurn, to);
+			for(GameObserver g:gameObservers){
+				g.checkerMove(to,playerInTurn==Color.BLACK?Location.R_BAR:Location.B_BAR);
+			}
+			for(GameObserver g:gameObservers){
+				g.checkerMove(from, to);
+			}
 			
 			return true;
 		}
 		board.remove(playerInTurn, from);
 		board.put(playerInTurn, to);
+		for(GameObserver g:gameObservers){
+			g.checkerMove(from, to);
+		}
 		return true;
 	}
+	
 	public Color getPlayerInTurn() { return playerInTurn; }
+	
 	public int getNumberOfMovesLeft() {
 		return numberOfMoves;
 	}
+	
 	public int[] diceThrown() {
 		if(diceValues==null){
 			diceValues=rollDeterminer.getDiceThrown();
@@ -144,12 +191,6 @@ public class GameImpl implements Game {
 	}
 	public int getCount(Location location) {
 		return board.getCountAt(location);
-	}
-	private boolean makeSureMovesLeft(){
-		if(numberOfMoves<=0){
-			return false;
-		}
-		return true;
 	}
 	public void configure(Placement[] placements) {
 		board.clear();

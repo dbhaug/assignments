@@ -30,11 +30,13 @@ public class HotGammonTool extends AbstractTool {
 
 	    model.lock();
 		figure = model.findFigure(e.getX(), e.getY());
-		if(game.getNumberOfMovesLeft()>0){
-			fChild=new CheckerMoveTool(editor, game,figure);
-		}
-		else {
-			fChild=new DieRollTool(editor, game);
+		if(figure!=null){
+			if(game.getNumberOfMovesLeft()>0){
+				fChild=new CheckerMoveTool(editor, game,figure);
+			}
+			else {
+				fChild=new DieRollTool(editor, game);
+			}
 		}
 		fChild.mouseDown(e, x, y);
 	}
@@ -52,5 +54,6 @@ public class HotGammonTool extends AbstractTool {
 	public void mouseUp(MouseEvent e,int x, int y){
 		editor().drawing().unlock();
 		fChild.mouseUp(e, x, y);
+		fChild=nullTool;
 	}
 }

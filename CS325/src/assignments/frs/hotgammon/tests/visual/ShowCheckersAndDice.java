@@ -6,12 +6,14 @@ import minidraw.framework.*;
 import java.awt.*;
 import javax.swing.*;
 
+import assignments.frs.hotgammon.common.GameImpl;
 import assignments.frs.hotgammon.framework.Game;
 import assignments.frs.hotgammon.tests.stub.StubGame1;
-import assignments.frs.hotgammon.tools.CheckerMoveTool;
 import assignments.frs.hotgammon.tools.HotGammonTool;
+import assignments.frs.hotgammon.variants.factories.SemiMon;
 import assignments.frs.hotgammon.view.CheckerFigure;
 import assignments.frs.hotgammon.view.DieFigure;
+import assignments.frs.hotgammon.view.HotGammonDrawing;
 
 /** Show the dice and some checkers on the
  * backgammon board.  
@@ -33,23 +35,13 @@ import assignments.frs.hotgammon.view.DieFigure;
 public class ShowCheckersAndDice {
   
   public static void main(String[] args) {
+    Game game=new GameImpl(new SemiMon());
     DrawingEditor editor = 
       new MiniDrawApplication( "Show HotGammon figures...",  
-                               new HotGammonFactory() );
+                               new HotGammonFactory(game) );
     editor.open();
-    Game game=new StubGame1();
     game.newGame();
     game.nextTurn();
-
-    DieFigure redDie = new DieFigure("die4", new Point(216, 202));
-    DieFigure blackDie = new DieFigure("die2", new Point(306, 202));
-    editor.drawing().add(redDie);
-    editor.drawing().add(blackDie);
-    
-    CheckerFigure bc = new CheckerFigure("blackchecker", new Point(21,21));
-    editor.drawing().add(bc);
-    CheckerFigure rc = new CheckerFigure("redchecker", new Point(507,390));
-    editor.drawing().add(rc);
 
     editor.setTool( new HotGammonTool(editor, game) );
 
@@ -57,14 +49,23 @@ public class ShowCheckersAndDice {
 }
 
 class HotGammonFactory implements Factory {
-  public DrawingView createDrawingView( DrawingEditor editor ) {
+  private Game game;
+
+public HotGammonFactory(Game game) {
+		this.game=game;
+	}
+
+public DrawingView createDrawingView( DrawingEditor editor ) {
     DrawingView view = 
       new StdViewWithBackground(editor, "board");
     return view;
   }
 
   public Drawing createDrawing( DrawingEditor editor ) {
-    return new StandardDrawing();
+	HotGammonDrawing temp=new HotGammonDrawing(game);
+    game.addObserver(temp);
+    return temp;
+    
   }
 
   public JTextField createStatusField( DrawingEditor editor ) {

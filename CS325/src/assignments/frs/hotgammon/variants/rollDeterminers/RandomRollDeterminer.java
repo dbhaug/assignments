@@ -7,12 +7,14 @@ public class RandomRollDeterminer implements RollDeterminer {
 
 	@Override
 	public int[] getDiceThrown() {
-		Random diceRoller=new Random(6);
-		return new int[]{diceRoller.nextInt()+1,diceRoller.nextInt()+1};
+		Random diceRoller=new Random();	
+		int[] temp={diceRoller.nextInt(6)+1,diceRoller.nextInt(6)+1};
+		return temp;
 	}
 
 	@Override
 	public void setTurns(int turns) {
+		
 	}
 
 }

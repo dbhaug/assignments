@@ -63,5 +63,15 @@ public class BoardImpl implements Board {
 			board[i].setColor(Color.NONE);
 		}
 	}
+	@Override
+	public void setColor(Color player, Location loc) {
+		if(board[loc.ordinal()].getCount()==0){
+			return;
+		}else if(board[loc.ordinal()].getColor()!=Color.NONE){
+			return;
+		}else{
+			board[loc.ordinal()].setColor(player);
+		}
+	}
 
 }

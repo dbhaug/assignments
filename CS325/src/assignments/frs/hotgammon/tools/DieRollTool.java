@@ -29,4 +29,7 @@ public class DieRollTool extends AbstractTool {
 	public void mouseUp(MouseEvent e, int x, int y){
 		editor().drawing().unlock();
 	}
+	public void mouseDrag(MouseEvent e, int x, int y){
+		
+	}
 }
