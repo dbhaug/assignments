@@ -2,18 +2,13 @@ package assignments.frs.hotgammon.tests.visual;
 
 import minidraw.standard.*;
 import minidraw.framework.*;
-
-import java.awt.*;
 import javax.swing.*;
-
 import assignments.frs.hotgammon.common.GameImpl;
 import assignments.frs.hotgammon.framework.Game;
-import assignments.frs.hotgammon.tests.stub.StubGame1;
 import assignments.frs.hotgammon.tools.HotGammonTool;
 import assignments.frs.hotgammon.variants.factories.SemiMon;
-import assignments.frs.hotgammon.view.CheckerFigure;
-import assignments.frs.hotgammon.view.DieFigure;
 import assignments.frs.hotgammon.view.HotGammonDrawing;
+import assignments.frs.hotgammon.view.HotGammonTextField;
 
 /** Show the dice and some checkers on the
  * backgammon board.  
@@ -69,8 +64,9 @@ public DrawingView createDrawingView( DrawingEditor editor ) {
   }
 
   public JTextField createStatusField( DrawingEditor editor ) {
-    JTextField statusField = new JTextField( "Hello HotGammon..." );
-    statusField.setEditable(false);
+    HotGammonTextField statusField = new HotGammonTextField( "Hello HotGammon..." );
+    game.addObserver(statusField);
+    statusField.setEditable(true);
     return statusField;
   }
 }

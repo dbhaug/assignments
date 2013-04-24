@@ -112,6 +112,7 @@ public class GameImpl implements Game {
 		diceValuesLeft.add(new Integer(diceThrown()[1]));
 		for(GameObserver g:gameObservers){
 			g.diceRolled(diceThrown());
+			g.statusUpdate("It is "+playerInTurn.toString()+"'s turn, "+getTurnStatusMessage());
 		}
 		if(diceThrown()[0]==diceThrown()[1]){
 			diceValuesLeft.add(new Integer(diceThrown()[0]));
@@ -130,6 +131,9 @@ public class GameImpl implements Game {
     }
 	public boolean move(Location from, Location to) {
 		if(!validator.isValid(from, to)){
+			for(GameObserver g:gameObservers){
+				g.statusUpdate("Incorrect Move!");
+			}
 			return false;
 		}
 		if(from!=Location.B_BEAR_OFF&&from!=Location.R_BEAR_OFF){
@@ -151,6 +155,7 @@ public class GameImpl implements Game {
 			}
 			for(GameObserver g:gameObservers){
 				g.checkerMove(from, to);
+				g.statusUpdate("Blot! "+getTurnStatusMessage());
 			}
 			
 			return true;
@@ -159,6 +164,7 @@ public class GameImpl implements Game {
 		board.put(playerInTurn, to);
 		for(GameObserver g:gameObservers){
 			g.checkerMove(from, to);
+			g.statusUpdate(getTurnStatusMessage());
 		}
 		return true;
 	}
@@ -205,5 +211,12 @@ public class GameImpl implements Game {
 	public void addObserver(GameObserver observer) {
 		gameObservers.add(observer);
 		
+	}
+	private String getTurnStatusMessage(){
+		if(numberOfMoves==0){
+			return "No moves left. Click a die to pass the turn";
+		}else {
+			return playerInTurn.toString()+ " has "+ numberOfMoves+" moves left";
+		}
 	}
 }

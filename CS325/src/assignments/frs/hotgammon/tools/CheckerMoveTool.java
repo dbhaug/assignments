@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 import assignments.frs.hotgammon.framework.Game;
-import assignments.frs.hotgammon.framework.GameObserver;
 import assignments.frs.hotgammon.framework.Location;
 import assignments.frs.hotgammon.view.Convert;
 import assignments.frs.hotgammon.view.DieFigure;
@@ -13,8 +12,6 @@ import minidraw.framework.DrawingEditor;
 import minidraw.framework.Figure;
 import minidraw.framework.Tool;
 import minidraw.standard.AbstractTool;
-import minidraw.standard.ImageFigure;
-import minidraw.standard.handlers.DragTracker;
 
 public class CheckerMoveTool extends AbstractTool {
 	

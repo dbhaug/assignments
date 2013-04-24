@@ -29,5 +29,7 @@ public interface GameObserver {
    * @param values the values of the two dice
    */
   public void diceRolled( int[] values );
+  
+  public void statusUpdate(String message);
 
 }

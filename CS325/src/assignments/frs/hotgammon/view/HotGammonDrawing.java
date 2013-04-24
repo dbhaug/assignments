@@ -3,16 +3,12 @@ package assignments.frs.hotgammon.view;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import assignments.frs.hotgammon.framework.Color;
 import assignments.frs.hotgammon.framework.Game;
 import assignments.frs.hotgammon.framework.GameObserver;
 import assignments.frs.hotgammon.framework.Location;
-
-import minidraw.framework.DrawingChangeListener;
 import minidraw.framework.Figure;
-import minidraw.framework.FigureChangeEvent;
 import minidraw.standard.StandardDrawing;
 
 public class HotGammonDrawing extends StandardDrawing implements GameObserver{
@@ -21,120 +17,6 @@ public class HotGammonDrawing extends StandardDrawing implements GameObserver{
 
 	public HotGammonDrawing(Game game) {
 		this.game=game;
-	}
-
-	@Override
-	public void addToSelection(Figure arg0) {
-		// TODO Auto-generated method stub
-		super.addToSelection(arg0);
-	}
-
-	@Override
-	public void clearSelection() {
-		// TODO Auto-generated method stub
-		super.clearSelection();
-	}
-
-	@Override
-	public void removeFromSelection(Figure arg0) {
-		// TODO Auto-generated method stub
-		super.removeFromSelection(arg0);
-	}
-
-	@Override
-	public List<Figure> selection() {
-		// TODO Auto-generated method stub
-		return super.selection();
-	}
-
-	@Override
-	public void toggleSelection(Figure arg0) {
-		// TODO Auto-generated method stub
-		super.toggleSelection(arg0);
-	}
-
-	@Override
-	public void figureChanged(FigureChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		super.figureChanged(arg0);
-	}
-
-	@Override
-	public void figureInvalidated(FigureChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		super.figureInvalidated(arg0);
-	}
-
-	@Override
-	public void figureRemoved(FigureChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		super.figureRemoved(arg0);
-	}
-
-	@Override
-	public void figureRequestRemove(FigureChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		super.figureRequestRemove(arg0);
-	}
-
-	@Override
-	public void figureRequestUpdate(FigureChangeEvent arg0) {
-		// TODO Auto-generated method stub
-		super.figureRequestUpdate(arg0);
-	}
-
-	@Override
-	public void addDrawingChangeListener(DrawingChangeListener arg0) {
-		// TODO Auto-generated method stub
-		super.addDrawingChangeListener(arg0);
-	}
-
-	@Override
-	public void removeDrawingChangeListener(DrawingChangeListener arg0) {
-		// TODO Auto-generated method stub
-		super.removeDrawingChangeListener(arg0);
-	}
-
-	@Override
-	public Figure findFigure(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		return super.findFigure(arg0, arg1);
-	}
-
-	@Override
-	public Iterator<Figure> iterator() {
-		// TODO Auto-generated method stub
-		return super.iterator();
-	}
-	
-	@Override
-	public Figure remove(Figure arg0) {
-		// TODO Auto-generated method stub
-		return super.remove(arg0);
-	}
-	
-	@Override
-	public Figure add(Figure arg0) {
-		// TODO Auto-generated method stub
-		return super.add(arg0);
-	}
-
-	@Override
-	public void requestUpdate() {
-		// TODO Auto-generated method stub
-		super.requestUpdate();
-	}
-	
-	@Override
-	public void lock() {
-		// TODO Auto-generated method stub
-		super.lock();
-	}
-	
-	@Override
-	public void unlock() {
-		// TODO Auto-generated method stub
-		super.unlock();
 	}
 
 	@Override
@@ -149,7 +31,6 @@ public class HotGammonDrawing extends StandardDrawing implements GameObserver{
 			Point newPoint=Convert.locationAndCount2xy(to, game.getCount(to));
 			Figure figure=findFigure(oldPoint.x,oldPoint.y);
 			if(figure!=null){
-				System.out.println("attempting a move to bar");
 				figure.moveBy(newPoint.x-oldPoint.x,newPoint.y-oldPoint.y);
 				oldPoint=Convert.locationAndCount2xy(from, 1);
 				newPoint=Convert.locationAndCount2xy(from,0);
@@ -164,8 +45,7 @@ public class HotGammonDrawing extends StandardDrawing implements GameObserver{
 				if(figure!=null){
 					System.out.println("attempting to move checker down");
 					figure.moveBy(newPoint.x-oldPoint.x,newPoint.y-oldPoint.y);
-				}
-				
+				}	
 			}
 		}
 		unlock();
@@ -189,4 +69,8 @@ public class HotGammonDrawing extends StandardDrawing implements GameObserver{
 		System.out.println("Placed!");
 	}
 
+	@Override
+	public void statusUpdate(String message) {
+		return;
+	}
 }
