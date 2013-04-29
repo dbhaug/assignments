@@ -32,6 +32,9 @@ public class CompleteMoveValidator implements MoveValidator {
 		if(!correctCheckerForPlayerInTurn(from)){
 			return false;
 		}
+		if(to==Location.B_BAR||to==Location.R_BAR){
+			return true;
+		}
 		if(anyBarPieces()&&from!=(game.getPlayerInTurn()==Color.BLACK?Location.B_BAR:Location.R_BAR)){
 			return false;
 		}

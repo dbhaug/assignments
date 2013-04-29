@@ -130,6 +130,15 @@ public class GameImpl implements Game {
         }
     }
 	public boolean move(Location from, Location to) {
+		if(board.getCountAt(playerInTurn==Color.BLACK?Location.B_BAR:Location.R_BAR)>0){
+			if(!checkForValidBarMoves()){
+				numberOfMoves=0;
+				for(GameObserver g:gameObservers){
+					g.statusUpdate("Stuck on the Bar!");
+				}
+				return false;
+			}
+		}
 		if(!validator.isValid(from, to)){
 			for(GameObserver g:gameObservers){
 				g.statusUpdate("Incorrect Move!");
@@ -218,5 +227,14 @@ public class GameImpl implements Game {
 		}else {
 			return playerInTurn.toString()+ " has "+ numberOfMoves+" moves left";
 		}
+	}
+	private boolean checkForValidBarMoves(){
+		for(int i:diceValuesLeft){
+			Location temp=Location.findLocation(playerInTurn, playerInTurn==Color.BLACK?Location.B_BAR:Location.R_BAR, i);
+			if(!validator.isValid(playerInTurn==Color.BLACK?Location.B_BAR:Location.R_BAR, temp)){
+				return false;
+			}
+		}
+		return true;
 	}
 }

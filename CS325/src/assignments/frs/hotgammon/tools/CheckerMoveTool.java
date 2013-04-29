@@ -21,6 +21,7 @@ public class CheckerMoveTool extends AbstractTool {
 	private int fLastY;
 	private Location fLastLoc;
 	private Game game;
+	private Point origin;
 
 	public CheckerMoveTool(DrawingEditor editor, Game game, Figure figure) {
 		super(editor);
@@ -46,6 +47,7 @@ public class CheckerMoveTool extends AbstractTool {
 			}
 			fLastLoc=Convert.xy2Location(x, y);
 			fLastX = x; fLastY = y; 
+			origin=new Point(figure.displayBox().x, figure.displayBox().y);
 		}
 		
 	}
@@ -66,11 +68,12 @@ public class CheckerMoveTool extends AbstractTool {
 		if(game.move(fLastLoc, newLoc)){
 			for (Figure f :editor().drawing().selection()){
 				f.moveBy(point.x-f.displayBox().x,point.y-f.displayBox().y);
+				System.out.println(f.displayBox().x+" "+f.displayBox().y);
 			}
 		}else {
-			Point oldPoint=Convert.locationAndCount2xy(fLastLoc, game.getCount(fLastLoc)-1);
 			for (Figure f :editor().drawing().selection()){
-				f.moveBy(oldPoint.x-f.displayBox().x,oldPoint.y-f.displayBox().y);
+				f.moveBy(origin.x-f.displayBox().x,origin.y-f.displayBox().y);
+				System.out.println(f.displayBox().x+" "+f.displayBox().y);
 			}
 		}
 		editor().drawing().clearSelection();
