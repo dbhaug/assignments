@@ -110,14 +110,15 @@ public class GameImpl implements Game {
 		diceValuesLeft=new ArrayList();
 		diceValuesLeft.add(new Integer(diceThrown()[0]));
 		diceValuesLeft.add(new Integer(diceThrown()[1]));
-		for(GameObserver g:gameObservers){
-			g.diceRolled(diceThrown());
-			g.statusUpdate("It is "+playerInTurn.toString()+"'s turn, "+getTurnStatusMessage());
-		}
+		
 		if(diceThrown()[0]==diceThrown()[1]){
 			diceValuesLeft.add(new Integer(diceThrown()[0]));
 			diceValuesLeft.add(new Integer(diceThrown()[1]));
 			numberOfMoves=4;
+		}
+		for(GameObserver g:gameObservers){
+			g.diceRolled(diceThrown());
+			g.statusUpdate("It is "+playerInTurn.toString()+"'s turn, "+getTurnStatusMessage());
 		}
 		
 	}
@@ -141,7 +142,7 @@ public class GameImpl implements Game {
 		}
 		if(!validator.isValid(from, to)){
 			for(GameObserver g:gameObservers){
-				g.statusUpdate("Incorrect Move!");
+				g.statusUpdate("Incorrect Move! "+getTurnStatusMessage());
 			}
 			return false;
 		}
