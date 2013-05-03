@@ -6,6 +6,7 @@ import javax.swing.*;
 import assignments.frs.hotgammon.common.GameImpl;
 import assignments.frs.hotgammon.framework.Game;
 import assignments.frs.hotgammon.tools.HotGammonTool;
+import assignments.frs.hotgammon.variants.factories.BlotTestMon;
 import assignments.frs.hotgammon.variants.factories.SemiMon;
 import assignments.frs.hotgammon.view.HotGammonDrawing;
 import assignments.frs.hotgammon.view.HotGammonTextField;
@@ -30,7 +31,7 @@ import assignments.frs.hotgammon.view.HotGammonTextField;
 public class ShowCheckersAndDice {
   
   public static void main(String[] args) {
-    Game game=new GameImpl(new SemiMon());
+    Game game=new GameImpl(new BlotTestMon());
     DrawingEditor editor = 
       new MiniDrawApplication( "Show HotGammon figures...",  
                                new HotGammonFactory(game) );

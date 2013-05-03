@@ -64,19 +64,14 @@ public class CheckerMoveTool extends AbstractTool {
 	public void mouseUp(MouseEvent e, int x, int y) {
 		if(figure!=null){
 			Location newLoc=Convert.xy2Location(x, y);
-		Point point=Convert.locationAndCount2xy(newLoc, game.getCount(newLoc));
+		
 		if(game.move(fLastLoc, newLoc)){
-			for (Figure f :editor().drawing().selection()){
-				f.moveBy(point.x-f.displayBox().x,point.y-f.displayBox().y);
-				System.out.println(f.displayBox().x+" "+f.displayBox().y);
-			}
+			int c = game.getCount(newLoc);
+			Point to_point=Convert.locationAndCount2xy(newLoc, game.getCount(newLoc)-1);
+			figure.moveBy(to_point.x-figure.displayBox().x,to_point.y-figure.displayBox().y);
 		}else {
-			for (Figure f :editor().drawing().selection()){
-				f.moveBy(origin.x-f.displayBox().x,origin.y-f.displayBox().y);
-				System.out.println(f.displayBox().x+" "+f.displayBox().y);
-			}
+			figure.moveBy(origin.x-figure.displayBox().x,origin.y-figure.displayBox().y);
 		}
-		editor().drawing().clearSelection();
 		editor().drawing().unlock();
 		}
 	}

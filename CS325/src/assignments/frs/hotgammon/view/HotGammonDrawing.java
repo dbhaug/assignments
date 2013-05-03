@@ -40,11 +40,12 @@ public class HotGammonDrawing extends StandardDrawing implements GameObserver{
 					Figure fig=it.next();
 					System.out.println(fig.displayBox().x+", "+fig.displayBox().y);
 				}
-				figure=findFigure(oldPoint.x,oldPoint.y);
+				figure=findFigure(oldPoint.x+13,oldPoint.y+13);
 				
 				if(figure!=null){
 					System.out.println("attempting to move checker down");
-					figure.moveBy(newPoint.x-oldPoint.x,newPoint.y-oldPoint.y);
+					System.out.println("moving by x "+(oldPoint.x-newPoint.x)+" y "+(oldPoint.y-newPoint.y));
+					figure.moveBy(oldPoint.x-newPoint.x,oldPoint.y-newPoint.y);
 				}	
 			}
 		}
