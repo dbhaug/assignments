@@ -52,11 +52,6 @@ public class GameImpl implements Game {
 		board=new BoardImpl();
 		board.put(Color.BLACK, Location.R_BEAR_OFF,15);
 		board.put(Color.RED, Location.B_BEAR_OFF,15);
-		move(Location.R_BEAR_OFF,Location.R1);
-		move(Location.B_BEAR_OFF,Location.R2);
-		board.setColor(Color.BLACK, Location.R1);
-		board.setColor(Color.RED, Location.R2);
-	/* 
 	 	move(Location.R_BEAR_OFF,Location.R1);
 		move(Location.R_BEAR_OFF,Location.R1);
 		move(Location.R_BEAR_OFF,Location.R12);
@@ -95,7 +90,6 @@ public class GameImpl implements Game {
 		board.setColor(Color.RED, Location.R8);
 		board.setColor(Color.RED, Location.B12);
 		board.setColor(Color.RED, Location.R6);
-	*/
 	}
 	public void setup(HotGammonFactory factory) {
 		this.factory=factory;
@@ -143,10 +137,21 @@ public class GameImpl implements Game {
 	}
 	
 	private void consumeDie(Location from, Location to) {
+		int length=diceValuesLeft.size();
 		for(int i:diceValuesLeft){
 			if(Math.abs(Location.distance(from, to))==i){
 				diceValuesLeft.remove(new Integer(i));
 				break;
+			}
+			
+		}
+		if(length==diceValuesLeft.size()){
+			int distance=Math.abs(Location.distance(from, to));
+			for(int i:diceValuesLeft){
+				if(distance<i){
+					diceValuesLeft.remove(new Integer(i));
+					break;
+				}
 			}
 		}
 		numberOfMoves--;
@@ -175,35 +180,26 @@ public class GameImpl implements Game {
 			return false;
 		}
 		if(isBearOffMove(from)){
+			
 			board.remove(playerInTurn, from);
 			board.put(playerInTurn, to);
 			notifyObserversOfMove(from, to);
 			return true;
 		}
-			
-	
+		consumeDie(from, to);
 		String  msg = getTurnStatusMessage();
 		
 		if(getColor(to).getSign()==-getPlayerInTurn().getSign()&&getCount(to)<2&&playerInTurn!=Color.NONE){
+			
 			board.put(getColor(to), playerInTurn==Color.BLACK?Location.R_BAR:Location.B_BAR);
 			board.remove(getColor(to), to);
-			//board.put(playerInTurn, to);
-			//board.remove(playerInTurn, from);
 			notifyObserversOfMove(to,playerInTurn==Color.BLACK?Location.R_BAR:Location.B_BAR );
-
-			//for(GameObserver g:gameObservers){
-			//	g.checkerMove(from, to);
-			//	g.statusUpdate("Blot! "+getTurnStatusMessage());
-			//}
-			
-			msg = "Blot!" + msg;
-			//return true;
+			msg = "Blot! " + msg;
 		}
 		board.remove(playerInTurn, from);
 		board.put(playerInTurn, to);
-		consumeDie(from, to);
+		
 		for(GameObserver g:gameObservers){
-			//g.checkerMove(from, to);
 			g.statusUpdate(msg);
 		}
 
@@ -257,16 +253,20 @@ public class GameImpl implements Game {
 		if(numberOfMoves==0){
 			return "No moves left. Click a die to pass the turn";
 		}else {
-			return playerInTurn.toString()+ " has "+ numberOfMoves+" moves left";
+			String temp=playerInTurn.toString()+ " has "+ numberOfMoves+" moves left "+" Dice values ";
+			for(int i:diceValuesLeft){
+				temp+=i+" ";
+			}
+			return temp;
 		}
 	}
 	private boolean checkForValidBarMoves(){
 		for(int i:diceValuesLeft){
 			Location temp=Location.findLocation(playerInTurn, playerInTurn==Color.BLACK?Location.B_BAR:Location.R_BAR, i);
-			if(!validator.isValid(playerInTurn==Color.BLACK?Location.B_BAR:Location.R_BAR, temp)){
-				return false;
+			if(validator.isValid(playerInTurn==Color.BLACK?Location.B_BAR:Location.R_BAR, temp)){
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 }

@@ -31,7 +31,7 @@ import assignments.frs.hotgammon.view.HotGammonTextField;
 public class ShowCheckersAndDice {
   
   public static void main(String[] args) {
-    Game game=new GameImpl(new BlotTestMon());
+    Game game=new GameImpl(new SemiMon());
     DrawingEditor editor = 
       new MiniDrawApplication( "Show HotGammon figures...",  
                                new HotGammonFactory(game) );

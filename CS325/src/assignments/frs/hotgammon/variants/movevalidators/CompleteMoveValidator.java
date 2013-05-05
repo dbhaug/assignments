@@ -75,13 +75,22 @@ public class CompleteMoveValidator implements MoveValidator {
 	}
 	private boolean hasDiceRollLeftForMove(Location from,Location to){
 		Location.distance(from, to);
+		
 		for(int i:game.diceValuesLeft()){
+			if(isToBearOffMove(to)){
+				if(Math.abs(Location.distance(from,to))<i){
+					return true;
+				}
+			}
 			if(Math.abs(Location.distance(from, to))==i){
 				return true;
 			}
 		}
 		
 		return false;
+	}
+	private boolean isToBearOffMove(Location to){
+		return to==(game.getPlayerInTurn()==Color.BLACK?Location.B_BEAR_OFF:Location.R_BEAR_OFF);
 	}
 	private boolean checkForStrayPiecesNotInInnerTable(Color player){
 		for(int i=18;i>6;i--){
